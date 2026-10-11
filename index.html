@@ -283,6 +283,20 @@ dialog.viewer::backdrop{background:rgba(8,14,11,.74)}
 .copy{font-family:var(--display);font-weight:600;font-size:.88rem;padding:9px 14px;border:1.5px solid var(--ink);border-radius:2px;background:var(--paper);color:var(--ink);cursor:pointer}
 .copy:hover{border-color:var(--leaf);color:var(--leaf)}
 
+/* Zoomable map images */
+button.plate{display:block;width:100%;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:zoom-in}
+button.plate:hover,.shot:hover{border-color:var(--leaf)}
+.shot{display:block;width:100%;max-width:100%;box-sizing:border-box;padding:4px;margin:0;background:var(--paper);border:1px solid var(--rule);cursor:zoom-in;font:inherit;color:inherit}
+.shot img{display:block;width:100%;height:100%;object-fit:contain}
+.shot-main{padding:6px}
+.shot-main img{height:auto}
+.shots{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (min-width:480px){.shots{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.shots li{display:grid;gap:6px;align-content:start;min-width:0}
+.shots .shot{aspect-ratio:4/3}
+.shots span{font-family:var(--mono);font-size:.68rem;line-height:1.35;color:var(--muted)}
+.sec-note a{font-family:var(--display);font-size:.92rem;font-weight:500;color:var(--leaf)}
+
 /* Upcoming projects */
 .upcoming{display:grid;grid-template-columns:1fr;gap:20px}
 @media (min-width:900px){.upcoming{grid-template-columns:1fr 1fr;gap:24px}}
@@ -361,6 +375,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     <div class="sec-head">
       <p class="eyebrow">Selected work</p>
       <h2>Maps and spatial analyses</h2>
+      <p class="sec-note"><a href="https://www.linkedin.com/in/stanley-sampa-msc-129310210/recent-activity/all/" target="_blank" rel="noopener">See these maps as posts on LinkedIn ↗</a></p>
     </div>
 
     <article class="case">
@@ -520,7 +535,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       <article class="analysis">
         <p class="eyebrow">Connectivity</p>
         <h3>Least-cost path, Nsumbu National Park</h3>
-        <p>Modelled the optimal route across the park for two periods. As land cover shifted between 2013 and 2026, the least-cost route grew from 15 km to 71.6 km, nearly five times longer.</p>
+        <p>Modelled the optimal route across the park for two periods. NDVI, land cover and slope from Landsat imagery were combined in a weighted overlay to build a cost surface, followed by cost distance and least-cost path analysis. Land cover was mapped into seven classes with supervised classification. As conditions changed between 2013 and 2026, the least-cost route grew from 15 km to 71.6 km, nearly five times longer.</p>
+        <p class="muted">The 2013 scene was captured in October, at the peak of the burning season, and the 2026 scene in June, so part of the difference in burnt area reflects timing.</p>
+        <button class="shot shot-main zoom" type="button" data-caption="Least-cost route, Nsumbu National Park, 2026 · cost surface, cost distance, slope, land cover, overlay and NDVI"><img src="img/maps/nsumbu-lcp-2026.webp" alt="Six-panel map of the 2026 least-cost route analysis for Nsumbu National Park" loading="lazy"></button>
         <figure class="chart" aria-label="Optimal route length: 15 kilometres in 2013, 71.6 kilometres in 2026">
           <figcaption>Optimal route length, km</figcaption>
           <div class="row">
@@ -546,24 +563,43 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
           </div>
         </figure>
         <dl class="meta">
-          <dt>Method</dt><dd>Cost-surface least-cost path analysis</dd>
-          <dt>Periods</dt><dd>2013 and 2026 land cover</dd>
+          <dt>Method</dt><dd>Weighted overlay, cost distance and least-cost path</dd>
+          <dt>Data</dt><dd>Landsat imagery, 2013 and 2026 · slope · NDVI</dd>
+          <dt>Software</dt><dd>ArcGIS (ArcMap)</dd>
         </dl>
+        <ul class="shots" aria-label="More Nsumbu maps">
+          <li><button class="shot zoom" type="button" data-caption="Least-cost route, Nsumbu National Park, 2013"><img src="img/maps/nsumbu-lcp-2013.webp" alt="Six-panel map of the 2013 least-cost route analysis for Nsumbu National Park" loading="lazy"></button><span>Route, 2013</span></li>
+          <li><button class="shot zoom" type="button" data-caption="Land use and land cover, Nsumbu National Park, 2026 and 2013"><img src="img/maps/nsumbu-landcover-2013-2026.webp" alt="Side-by-side land cover maps of Nsumbu National Park for 2026 and 2013" loading="lazy"></button><span>Land cover, 2013 and 2026</span></li>
+          <li><button class="shot zoom" type="button" data-caption="Cost surface inputs, 2013 · cost surface, land cover, slope and NDVI"><img src="img/maps/nsumbu-cost-inputs-2013.webp" alt="Four-panel map of the 2013 cost surface inputs for Nsumbu National Park" loading="lazy"></button><span>Cost surface inputs, 2013</span></li>
+          <li><button class="shot zoom" type="button" data-caption="Supervised land cover classification of Nsumbu in ArcMap"><img src="img/maps/nsumbu-classification-arcmap.webp" alt="ArcMap screen showing supervised classification of Nsumbu National Park with the training sample manager" loading="lazy"></button><span>Classification in ArcMap</span></li>
+        </ul>
       </article>
     </div>
 
     <div class="maps">
       <article class="map-card">
-        <div class="plate plate-img"><img src="img/gwembe-terrain.webp" width="1400" height="926" alt="Shaded relief map of Gwembe District, with the escarpment in the north-west, ridges running south-west to north-east, and Lake Kariba in the south-east" loading="lazy"><span class="plate-label">30 m DEM · Gwembe District</span></div>
+        <button class="plate plate-img zoom" type="button" data-caption="Terrain of the Gwembe Valley · 30 m elevation model"><img src="img/gwembe-terrain.webp" width="1400" height="926" alt="Shaded relief map of Gwembe District, with the escarpment in the north-west, ridges running south-west to north-east, and Lake Kariba in the south-east" loading="lazy"><span class="plate-label">30 m DEM · Gwembe District</span></button>
         <h3>Terrain of the Gwembe Valley</h3>
         <p>Shaded relief from about 480 m at the Lake Kariba shoreline to 1,345 m on the escarpment in the north-west. Ridges run south-west to north-east across the valley floor.</p>
         <dl class="meta"><dt>Data</dt><dd>30 m elevation model, clipped to the district</dd></dl>
       </article>
       <article class="map-card">
-        <div class="plate plate-density" role="img" aria-label="Decorative dot pattern"><span class="plate-label">GHS-POP R2023A · epoch 2030</span></div>
+        <button class="plate plate-img zoom" type="button" data-caption="Population density of Lusaka District, 2030 · GHS-POP R2023A"><img src="img/maps/lusaka-density-2030.webp" alt="Map of projected 2030 population density across Lusaka District, highest around the city core and northern settlements" loading="lazy"></button>
         <h3>Population density, Lusaka District</h3>
-        <p>Population density across Lusaka District from the Global Human Settlement Layer’s 2030 projection. Colour ramps, raster statistics and display resampling were tuned so the dense core and the sparse edges read clearly on one map.</p>
-        <dl class="meta"><dt>Software</dt><dd>ArcGIS</dd></dl>
+        <p>Projected 2030 population density from the Global Human Settlement Layer, clipped to the DMMU district boundary. Compact zones around the city core and northern settlements reach more than 900 people per 100 m cell. Colour ramps, raster statistics and display resampling were tuned so the dense core and the sparse edges read clearly on one map.</p>
+        <dl class="meta"><dt>Data</dt><dd>GHS-POP R2023A, epoch 2030 · DMMU ADM2 boundary</dd><dt>Software</dt><dd>ArcGIS</dd></dl>
+      </article>
+      <article class="map-card">
+        <button class="plate plate-img zoom" type="button" data-caption="Soil map of Zambia, FAO classification · FAO Digital Soil Map of the World"><img src="img/maps/zambia-soils-fao.webp" alt="Soil map of Zambia showing FAO soil units with a full legend" loading="lazy"></button>
+        <h3>Soil map of Zambia</h3>
+        <p>Zambia’s soil units mapped from the FAO Digital Soil Map of the World using the FAO classification. Next, the soil layer will be combined with land cover, elevation and NDVI to study how soils, vegetation, terrain and land degradation relate.</p>
+        <dl class="meta"><dt>Data</dt><dd>FAO Digital Soil Map of the World</dd><dt>Projection</dt><dd>WGS 84 / UTM Zone 35S · Aug 2026</dd></dl>
+      </article>
+      <article class="map-card">
+        <button class="plate plate-img zoom" type="button" data-caption="The rivers of Zambia · HydroSHEDS"><img src="img/maps/rivers-zambia.webp" alt="Dark-themed map of Zambia's river network in glowing blue" loading="lazy"></button>
+        <h3>Rivers of Zambia</h3>
+        <p>Zambia’s drainage network from HydroSHEDS, styled on a dark background so the main rivers stand out against thousands of tributaries.</p>
+        <dl class="meta"><dt>Data</dt><dd>HydroSHEDS</dd><dt>Software</dt><dd>QGIS 4.0</dd></dl>
       </article>
       <article class="map-card">
         <div class="plate plate-fireloss" role="img" aria-label="Decorative hatch pattern"><span class="plate-label">GLAD UMD · fire-driven forest loss</span></div>
@@ -909,7 +945,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   var vCap = document.getElementById('viewer-cap');
   function closeViewer(){ try { dlg.close(); } catch (e) { dlg.removeAttribute('open'); } }
   if (dlg && vImg) {
-    document.querySelectorAll('.cert-thumb').forEach(function(b){
+    document.querySelectorAll('.cert-thumb, .zoom').forEach(function(b){
       b.addEventListener('click', function(){
         var img = b.querySelector('img');
         vImg.src = img.src; vImg.alt = img.alt;
