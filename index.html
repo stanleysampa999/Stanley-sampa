@@ -331,6 +331,23 @@ button.plate:hover,.shot:hover{border-color:var(--leaf)}
 .shots span{font-family:var(--mono);font-size:.68rem;line-height:1.35;color:var(--muted)}
 .sec-note a{font-family:var(--display);font-size:.92rem;font-weight:500;color:var(--leaf)}
 
+/* Projects list */
+.projects{display:grid;gap:clamp(48px,7vw,72px)}
+.project{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;padding-top:22px;border-top:1px solid var(--rule)}
+.project:first-child{border-top:0;padding-top:0}
+@media (min-width:860px){.project{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px}}
+.project-media,.project-body{display:grid;gap:12px;align-content:start;min-width:0}
+.project-body h3{font-size:clamp(1.2rem,2.4vw,1.45rem)}
+.project-media .shot-main img{max-height:620px}
+.duo{display:grid;grid-template-columns:1fr;gap:10px}
+.duo .map-fig{padding:0;border:0;background:transparent}
+.duo .map-fig figcaption{top:8px;left:8px}
+.duo .shot img{height:auto}
+
+/* Justified paragraphs */
+main p,.lede{text-align:justify;-webkit-hyphens:auto;hyphens:auto}
+main p.eyebrow,main p.col-title,main p.where,main p.sec-note,main .cert-meta{text-align:left;-webkit-hyphens:manual;hyphens:manual}
+
 /* Upcoming projects */
 .upcoming{display:grid;grid-template-columns:1fr;gap:20px}
 @media (min-width:900px){.upcoming{grid-template-columns:1fr 1fr;gap:24px}}
@@ -363,7 +380,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   </div>
 </div>
 
-<header class="hero wrap" id="top">
+<header class="hero wrap" id="top" lang="en">
   <div class="sheet">
     <div class="frame">
       <canvas id="contours" aria-hidden="true"></canvas>
@@ -385,7 +402,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   </div>
 </header>
 
-<main>
+<main lang="en">
   <section class="section wrap" id="about">
     <div class="sec-head">
       <p class="eyebrow">About</p>
@@ -453,240 +470,272 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       <p class="sec-note"><a href="https://www.linkedin.com/in/stanley-sampa-msc-129310210/recent-activity/all/" target="_blank" rel="noopener">See these maps as posts on LinkedIn ↗</a></p>
     </div>
 
-    <article class="case">
-      <div class="case-head">
-        <p class="eyebrow">Case study · Sentinel-2 Dynamic World</p>
-        <h3 class="case-title">Gwembe District, 2017 to 2026</h3>
-        <p>Gwembe runs from the Zambezi escarpment down to the shores of Lake Kariba, and it is where I work with farmer groups. I compared Dynamic World land cover for 2017 and 2026 across the district’s 3,670 km², about 645 km² of it lake, and traced which classes turned into which.</p>
-        <p>Over nine years, 303 km² of tree cover became shrub and scrub while 168 km² went the other way. Overall, tree cover fell from 1,885 km² to 1,749 km². Built-up land roughly doubled, and most new settlement was built on former scrubland.</p>
-      </div>
-
-      <div class="case-maps">
-        <figure class="map-fig">
-          <img src="img/gwembe-landcover-2017.webp" width="1400" height="926" alt="Land cover map of Gwembe District in 2017, dominated by tree cover with bands of shrub and scrub, and Lake Kariba to the south-east" loading="lazy">
-          <figcaption>2017</figcaption>
-        </figure>
-        <figure class="map-fig">
-          <img src="img/gwembe-landcover-2026.webp" width="1400" height="926" alt="Land cover map of Gwembe District in 2026, showing wider bands of shrub and scrub than in 2017" loading="lazy">
-          <figcaption>2026</figcaption>
-        </figure>
-      </div>
-      <ul class="legend-dw" aria-label="Map legend">
-        <li><i class="sw" style="background:#397d49"></i>Trees</li>
-        <li><i class="sw" style="background:#dfc35a"></i>Shrub and scrub</li>
-        <li><i class="sw" style="background:#e49635"></i>Crops</li>
-        <li><i class="sw" style="background:#c4281b"></i>Built-up</li>
-        <li><i class="sw" style="background:#88b053"></i>Grass</li>
-        <li><i class="sw" style="background:#7a87c6"></i>Flooded vegetation</li>
-        <li><i class="sw" style="background:#a59b8f"></i>Bare ground</li>
-        <li><i class="sw" style="background:#419bdf"></i>Water</li>
-      </ul>
-
-      <div class="case-stats">
-        <div>
+    <div class="projects">
+      <article class="project">
+        <div class="project-media">
+          <div class="duo">
+            <figure class="map-fig"><button class="shot zoom" type="button" data-caption="Gwembe District land cover, 2017 · Dynamic World"><img src="img/gwembe-landcover-2017.webp" width="1400" height="926" alt="Land cover map of Gwembe District in 2017, dominated by tree cover with bands of shrub and scrub, and Lake Kariba to the south-east" loading="lazy"></button><figcaption>2017</figcaption></figure>
+            <figure class="map-fig"><button class="shot zoom" type="button" data-caption="Gwembe District land cover, 2026 · Dynamic World"><img src="img/gwembe-landcover-2026.webp" width="1400" height="926" alt="Land cover map of Gwembe District in 2026, showing wider bands of shrub and scrub than in 2017" loading="lazy"></button><figcaption>2026</figcaption></figure>
+          </div>
+          <ul class="legend-dw" aria-label="Map legend">
+          <li><i class="sw" style="background:#397d49"></i>Trees</li>
+          <li><i class="sw" style="background:#dfc35a"></i>Shrub and scrub</li>
+          <li><i class="sw" style="background:#e49635"></i>Crops</li>
+          <li><i class="sw" style="background:#c4281b"></i>Built-up</li>
+          <li><i class="sw" style="background:#88b053"></i>Grass</li>
+          <li><i class="sw" style="background:#7a87c6"></i>Flooded vegetation</li>
+          <li><i class="sw" style="background:#a59b8f"></i>Bare ground</li>
+          <li><i class="sw" style="background:#419bdf"></i>Water</li>
+          </ul>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Oct 2026 · Change detection</p>
+          <h3>Land cover change in Gwembe District, 2017–2026</h3>
+          <p>Gwembe runs from the Zambezi escarpment down to the shores of Lake Kariba, and it is where I work with farmer groups. I compared Dynamic World land cover for 2017 and 2026 across the district’s 3,670 km², about 645 km² of it lake, and traced which classes turned into which.</p>
+          <p>Over nine years, 303 km² of tree cover became shrub and scrub while 168 km² went the other way. Overall, tree cover fell from 1,885 km² to 1,749 km². Built-up land roughly doubled, and most new settlement was built on former scrubland.</p>
+          <div>
           <p class="col-title">Class area, km²</p>
           <div class="table-wrap">
-            <table class="area">
-              <thead><tr><th scope="col">Class</th><th scope="col">2017</th><th scope="col">2026</th><th scope="col">Change</th></tr></thead>
-              <tbody>
-                <tr><td>Trees</td><td>1,885</td><td>1,749</td><td>−7.2%</td></tr>
-                <tr><td>Shrub and scrub</td><td>1,018</td><td>1,175</td><td>+15.3%</td></tr>
-                <tr><td>Crops</td><td>49.1</td><td>41.3</td><td>−15.7%</td></tr>
-                <tr><td>Built-up</td><td>3.2</td><td>6.6</td><td>+107%</td></tr>
-              </tbody>
-            </table>
+          <table class="area">
+          <thead><tr><th scope="col">Class</th><th scope="col">2017</th><th scope="col">2026</th><th scope="col">Change</th></tr></thead>
+          <tbody>
+          <tr><td>Trees</td><td>1,885</td><td>1,749</td><td>−7.2%</td></tr>
+          <tr><td>Shrub and scrub</td><td>1,018</td><td>1,175</td><td>+15.3%</td></tr>
+          <tr><td>Crops</td><td>49.1</td><td>41.3</td><td>−15.7%</td></tr>
+          <tr><td>Built-up</td><td>3.2</td><td>6.6</td><td>+107%</td></tr>
+          </tbody>
+          </table>
           </div>
-        </div>
-        <figure class="chart" aria-label="Largest land cover conversions in km²: trees to scrub 303, scrub to trees 168, crops to scrub 26, scrub to crops 14.5, scrub to built-up 3.5">
+          </div>
+          <figure class="chart" aria-label="Largest land cover conversions in km²: trees to scrub 303, scrub to trees 168, crops to scrub 26, scrub to crops 14.5, scrub to built-up 3.5">
           <figcaption>Largest conversions, 2017 to 2026, km²</figcaption>
           <div class="row wide">
-            <span class="row-label">Trees → scrub</span>
-            <span class="track"><span class="bar" style="left:0;width:94.75%;background:#dfc35a"></span></span>
-            <span class="row-val">303</span>
+          <span class="row-label">Trees → scrub</span>
+          <span class="track"><span class="bar" style="left:0;width:94.75%;background:#dfc35a"></span></span>
+          <span class="row-val">303</span>
           </div>
           <div class="row wide">
-            <span class="row-label">Scrub → trees</span>
-            <span class="track"><span class="bar" style="left:0;width:52.59%;background:#397d49"></span></span>
-            <span class="row-val">168</span>
+          <span class="row-label">Scrub → trees</span>
+          <span class="track"><span class="bar" style="left:0;width:52.59%;background:#397d49"></span></span>
+          <span class="row-val">168</span>
           </div>
           <div class="row wide">
-            <span class="row-label">Crops → scrub</span>
-            <span class="track"><span class="bar" style="left:0;width:8.13%;background:#dfc35a"></span></span>
-            <span class="row-val">26.0</span>
+          <span class="row-label">Crops → scrub</span>
+          <span class="track"><span class="bar" style="left:0;width:8.13%;background:#dfc35a"></span></span>
+          <span class="row-val">26.0</span>
           </div>
           <div class="row wide">
-            <span class="row-label">Scrub → crops</span>
-            <span class="track"><span class="bar" style="left:0;width:4.52%;background:#e49635"></span></span>
-            <span class="row-val">14.5</span>
+          <span class="row-label">Scrub → crops</span>
+          <span class="track"><span class="bar" style="left:0;width:4.52%;background:#e49635"></span></span>
+          <span class="row-val">14.5</span>
           </div>
           <div class="row wide">
-            <span class="row-label">Scrub → built-up</span>
-            <span class="track"><span class="bar" style="left:0;width:1.08%;background:#c4281b"></span></span>
-            <span class="row-val">3.5</span>
+          <span class="row-label">Scrub → built-up</span>
+          <span class="track"><span class="bar" style="left:0;width:1.08%;background:#c4281b"></span></span>
+          <span class="row-val">3.5</span>
           </div>
           <div class="row wide axis" aria-hidden="true">
-            <span></span>
-            <span class="track">
-              <span class="tick start" style="left:0">0</span>
-              <span class="tick t-minor" style="left:25%">80</span>
-              <span class="tick" style="left:50%">160</span>
-              <span class="tick t-minor" style="left:75%">240</span>
-              <span class="tick end" style="left:100%">320</span>
-            </span>
-            <span></span>
+          <span></span>
+          <span class="track">
+          <span class="tick start" style="left:0">0</span>
+          <span class="tick t-minor" style="left:25%">80</span>
+          <span class="tick" style="left:50%">160</span>
+          <span class="tick t-minor" style="left:75%">240</span>
+          <span class="tick end" style="left:100%">320</span>
+          </span>
+          <span></span>
           </div>
-        </figure>
-      </div>
-
-      <div class="national">
-        <p class="eyebrow">National context</p>
-        <h4>Tree cover change across Zambia</h4>
-        <figure class="chart" aria-label="Zambia Dynamic World tree class, 2017 to 2026: gross loss 6.39 million hectares, gross gain 6.23 million hectares">
-          <figcaption>Dynamic World tree class, 2017–2026, million ha</figcaption>
-          <div class="row">
-            <span class="row-label">Gross loss</span>
-            <span class="track"><span class="bar c-agri" style="left:0;width:91.3%"></span></span>
-            <span class="row-val">6.39</span>
-          </div>
-          <div class="row">
-            <span class="row-label">Gross gain</span>
-            <span class="track"><span class="bar c-tree" style="left:0;width:88.96%"></span></span>
-            <span class="row-val">6.23</span>
-          </div>
-          <div class="row axis" aria-hidden="true">
-            <span></span>
-            <span class="track">
-              <span class="tick start" style="left:0">0</span>
-              <span class="tick" style="left:28.57%">2</span>
-              <span class="tick" style="left:57.14%">4</span>
-              <span class="tick" style="left:85.71%">6</span>
-            </span>
-            <span></span>
-          </div>
-        </figure>
-        <p>Between 2017 and 2026, gross losses and gains in Zambia’s tree class nearly cancel out, leaving a net loss of about 164,000 ha. A separate loss layer puts tree loss for 2017–2024 at 1.39 million ha.</p>
-      </div>
-    </article>
-
-    <div class="feature-grid">
-      <article class="analysis">
-        <p class="eyebrow">Change detection</p>
-        <h3>Land cover change, 2019–2024</h3>
-        <p>Compared classified land cover for 2019, 2023 and 2024 from 10 m Sentinel-2 imagery. Built-up land and farmland expanded sharply while tree cover fell by about a tenth. A separate comparison extends the record from 2013 to 2026.</p>
-        <figure class="chart" aria-label="Change in class area: built-up plus 40.51 percent, agriculture plus 25.72 percent, tree cover minus 10.16 percent">
-          <figcaption>Change in class area, 2019–2024</figcaption>
-          <div class="row">
-            <span class="row-label">Built-up</span>
-            <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-built" style="left:25%;width:67.52%"></span></span>
-            <span class="row-val">+40.51%</span>
-          </div>
-          <div class="row">
-            <span class="row-label">Agriculture</span>
-            <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-agri" style="left:25%;width:42.87%"></span></span>
-            <span class="row-val">+25.72%</span>
-          </div>
-          <div class="row">
-            <span class="row-label">Tree cover</span>
-            <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-tree" style="left:8.07%;width:16.93%"></span></span>
-            <span class="row-val">−10.16%</span>
-          </div>
-          <div class="row axis" aria-hidden="true">
-            <span></span>
-            <span class="track">
-              <span class="tick" style="left:8.33%">−10</span>
-              <span class="tick" style="left:25%">0</span>
-              <span class="tick" style="left:58.33%">+20</span>
-              <span class="tick" style="left:91.67%">+40</span>
-            </span>
-            <span></span>
-          </div>
-        </figure>
-        <dl class="meta">
-          <dt>Data</dt><dd>Sentinel-2 · Esri 10 m Land Cover</dd>
-          <dt>Years</dt><dd>2019, 2023, 2024</dd>
-        </dl>
+          </figure>
+          <dl class="meta"><dt>Data</dt><dd>Sentinel-2 Dynamic World, 10 m</dd><dt>Years</dt><dd>2017 and 2026</dd></dl>
+        </div>
       </article>
 
-      <article class="analysis">
-        <p class="eyebrow">Connectivity</p>
-        <h3>Least-cost path, Nsumbu National Park</h3>
-        <p>Modelled the optimal route across the park for two periods. NDVI, land cover and slope from Landsat imagery were combined in a weighted overlay to build a cost surface, followed by cost distance and least-cost path analysis. Land cover was mapped into seven classes with supervised classification. As conditions changed between 2013 and 2026, the least-cost route grew from 15 km to 71.6 km, nearly five times longer.</p>
-        <p class="muted">The 2013 scene was captured in October, at the peak of the burning season, and the 2026 scene in June, so part of the difference in burnt area reflects timing.</p>
-        <button class="shot shot-main zoom" type="button" data-caption="Least-cost route, Nsumbu National Park, 2026 · cost surface, cost distance, slope, land cover, overlay and NDVI"><img src="img/maps/nsumbu-lcp-2026.webp" alt="Six-panel map of the 2026 least-cost route analysis for Nsumbu National Park" loading="lazy"></button>
-        <figure class="chart" aria-label="Optimal route length: 15 kilometres in 2013, 71.6 kilometres in 2026">
-          <figcaption>Optimal route length, km</figcaption>
+      <article class="project">
+        <div class="project-media">
+          <figure class="chart" aria-label="Zambia Dynamic World tree class, 2017 to 2026: gross loss 6.39 million hectares, gross gain 6.23 million hectares">
+          <figcaption>Dynamic World tree class, 2017–2026, million ha</figcaption>
           <div class="row">
-            <span class="row-label">2013</span>
-            <span class="track"><span class="bar c-then" style="left:0;width:18.75%"></span></span>
-            <span class="row-val">15 km</span>
+          <span class="row-label">Gross loss</span>
+          <span class="track"><span class="bar c-agri" style="left:0;width:91.3%"></span></span>
+          <span class="row-val">6.39</span>
           </div>
           <div class="row">
-            <span class="row-label">2026</span>
-            <span class="track"><span class="bar c-now" style="left:0;width:89.5%"></span></span>
-            <span class="row-val">71.6 km</span>
+          <span class="row-label">Gross gain</span>
+          <span class="track"><span class="bar c-tree" style="left:0;width:88.96%"></span></span>
+          <span class="row-val">6.23</span>
           </div>
           <div class="row axis" aria-hidden="true">
-            <span></span>
-            <span class="track">
-              <span class="tick start" style="left:0">0</span>
-              <span class="tick" style="left:25%">20</span>
-              <span class="tick" style="left:50%">40</span>
-              <span class="tick" style="left:75%">60</span>
-              <span class="tick end" style="left:100%">80</span>
-            </span>
-            <span></span>
+          <span></span>
+          <span class="track">
+          <span class="tick start" style="left:0">0</span>
+          <span class="tick" style="left:28.57%">2</span>
+          <span class="tick" style="left:57.14%">4</span>
+          <span class="tick" style="left:85.71%">6</span>
+          </span>
+          <span></span>
           </div>
-        </figure>
-        <dl class="meta">
-          <dt>Method</dt><dd>Weighted overlay, cost distance and least-cost path</dd>
-          <dt>Data</dt><dd>Landsat imagery, 2013 and 2026 · slope · NDVI</dd>
-          <dt>Software</dt><dd>ArcGIS (ArcMap)</dd>
-        </dl>
-        <ul class="shots" aria-label="More Nsumbu maps">
+          </figure>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Oct 2026 · National analysis</p>
+          <h3>Tree cover change across Zambia, 2017–2026</h3>
+          <p>Using the Dynamic World tree class, I measured where Zambia gained and lost tree cover between 2017 and 2026. Gross losses of 6.39 million ha and gains of 6.23 million ha nearly cancel out, leaving a net loss of about 164,000 ha. A separate loss layer puts tree loss for 2017–2024 at 1.39 million ha.</p>
+          <dl class="meta"><dt>Data</dt><dd>Sentinel-2 Dynamic World tree class</dd><dt>Extent</dt><dd>Zambia, national</dd></dl>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-media">
+          <button class="shot shot-main zoom" type="button" data-caption="Terrain of the Gwembe Valley · 30 m elevation model"><img src="img/gwembe-terrain.webp" width="1400" height="926" alt="Shaded relief map of Gwembe District, with the escarpment in the north-west, ridges running south-west to north-east, and Lake Kariba in the south-east" loading="lazy"></button>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Oct 2026 · Terrain</p>
+          <h3>Terrain of the Gwembe Valley</h3>
+          <p>Shaded relief from about 480 m at the Lake Kariba shoreline to 1,345 m on the escarpment in the north-west. Ridges run south-west to north-east across the valley floor.</p>
+          <dl class="meta"><dt>Data</dt><dd>30 m elevation model, clipped to the district</dd></dl>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-media">
+          <button class="shot shot-main zoom" type="button" data-caption="Soil map of Zambia, FAO classification · FAO Digital Soil Map of the World"><img src="img/maps/zambia-soils-fao.webp" alt="Soil map of Zambia showing FAO soil units with a full legend" loading="lazy"></button>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Aug 2026 · Soil mapping</p>
+          <h3>Soil map of Zambia</h3>
+          <p>Zambia’s soil units mapped from the FAO Digital Soil Map of the World using the FAO classification. Next, the soil layer will be combined with land cover, elevation and NDVI to study how soils, vegetation, terrain and land degradation relate.</p>
+          <dl class="meta"><dt>Data</dt><dd>FAO Digital Soil Map of the World</dd><dt>Projection</dt><dd>WGS 84 / UTM Zone 35S</dd></dl>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-media">
+          <button class="shot shot-main zoom" type="button" data-caption="Least-cost route, Nsumbu National Park, 2026 · cost surface, cost distance, slope, land cover, overlay and NDVI"><img src="img/maps/nsumbu-lcp-2026.webp" alt="Six-panel map of the 2026 least-cost route analysis for Nsumbu National Park" loading="lazy"></button>
+          <ul class="shots" aria-label="More Nsumbu maps">
           <li><button class="shot zoom" type="button" data-caption="Least-cost route, Nsumbu National Park, 2013"><img src="img/maps/nsumbu-lcp-2013.webp" alt="Six-panel map of the 2013 least-cost route analysis for Nsumbu National Park" loading="lazy"></button><span>Route, 2013</span></li>
           <li><button class="shot zoom" type="button" data-caption="Land use and land cover, Nsumbu National Park, 2026 and 2013"><img src="img/maps/nsumbu-landcover-2013-2026.webp" alt="Side-by-side land cover maps of Nsumbu National Park for 2026 and 2013" loading="lazy"></button><span>Land cover, 2013 and 2026</span></li>
           <li><button class="shot zoom" type="button" data-caption="Cost surface inputs, 2013 · cost surface, land cover, slope and NDVI"><img src="img/maps/nsumbu-cost-inputs-2013.webp" alt="Four-panel map of the 2013 cost surface inputs for Nsumbu National Park" loading="lazy"></button><span>Cost surface inputs, 2013</span></li>
           <li><button class="shot zoom" type="button" data-caption="Supervised land cover classification of Nsumbu in ArcMap"><img src="img/maps/nsumbu-classification-arcmap.webp" alt="ArcMap screen showing supervised classification of Nsumbu National Park with the training sample manager" loading="lazy"></button><span>Classification in ArcMap</span></li>
-        </ul>
+          </ul>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Jul 2026 · Connectivity</p>
+          <h3>Least-cost path, Nsumbu National Park, 2013 and 2026</h3>
+          <p>Modelled the optimal route across the park for two periods. NDVI, land cover and slope from Landsat imagery were combined in a weighted overlay to build a cost surface, followed by cost distance and least-cost path analysis. Land cover was mapped into seven classes with supervised classification. As conditions changed between 2013 and 2026, the least-cost route grew from 15 km to 71.6 km, nearly five times longer.</p>
+          <p class="muted">The 2013 scene was captured in October, at the peak of the burning season, and the 2026 scene in June, so part of the difference in burnt area reflects timing.</p>
+          <figure class="chart" aria-label="Optimal route length: 15 kilometres in 2013, 71.6 kilometres in 2026">
+          <figcaption>Optimal route length, km</figcaption>
+          <div class="row">
+          <span class="row-label">2013</span>
+          <span class="track"><span class="bar c-then" style="left:0;width:18.75%"></span></span>
+          <span class="row-val">15 km</span>
+          </div>
+          <div class="row">
+          <span class="row-label">2026</span>
+          <span class="track"><span class="bar c-now" style="left:0;width:89.5%"></span></span>
+          <span class="row-val">71.6 km</span>
+          </div>
+          <div class="row axis" aria-hidden="true">
+          <span></span>
+          <span class="track">
+          <span class="tick start" style="left:0">0</span>
+          <span class="tick" style="left:25%">20</span>
+          <span class="tick" style="left:50%">40</span>
+          <span class="tick" style="left:75%">60</span>
+          <span class="tick end" style="left:100%">80</span>
+          </span>
+          <span></span>
+          </div>
+          </figure>
+          <dl class="meta"><dt>Method</dt><dd>Weighted overlay, cost distance and least-cost path</dd><dt>Data</dt><dd>Landsat imagery, 2013 and 2026 · slope · NDVI</dd><dt>Software</dt><dd>ArcGIS (ArcMap)</dd></dl>
+        </div>
       </article>
-    </div>
 
-    <div class="maps">
-      <article class="map-card">
-        <button class="plate plate-img zoom" type="button" data-caption="Terrain of the Gwembe Valley · 30 m elevation model"><img src="img/gwembe-terrain.webp" width="1400" height="926" alt="Shaded relief map of Gwembe District, with the escarpment in the north-west, ridges running south-west to north-east, and Lake Kariba in the south-east" loading="lazy"><span class="plate-label">30 m DEM · Gwembe District</span></button>
-        <h3>Terrain of the Gwembe Valley</h3>
-        <p>Shaded relief from about 480 m at the Lake Kariba shoreline to 1,345 m on the escarpment in the north-west. Ridges run south-west to north-east across the valley floor.</p>
-        <dl class="meta"><dt>Data</dt><dd>30 m elevation model, clipped to the district</dd></dl>
+      <article class="project">
+        <div class="project-media">
+          <button class="shot shot-main zoom" type="button" data-caption="Population density of Lusaka District, 2030 · GHS-POP R2023A"><img src="img/maps/lusaka-density-2030.webp" alt="Map of projected 2030 population density across Lusaka District, highest around the city core and northern settlements" loading="lazy"></button>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Jul 2026 · Population</p>
+          <h3>Population density, Lusaka District, 2030</h3>
+          <p>Projected 2030 population density from the Global Human Settlement Layer, clipped to the DMMU district boundary. Compact zones around the city core and northern settlements reach more than 900 people per 100 m cell. Colour ramps, raster statistics and display resampling were tuned so the dense core and the sparse edges read clearly on one map.</p>
+          <dl class="meta"><dt>Data</dt><dd>GHS-POP R2023A, epoch 2030 · DMMU ADM2 boundary</dd><dt>Software</dt><dd>ArcGIS</dd></dl>
+        </div>
       </article>
-      <article class="map-card">
-        <button class="plate plate-img zoom" type="button" data-caption="Population density of Lusaka District, 2030 · GHS-POP R2023A"><img src="img/maps/lusaka-density-2030.webp" alt="Map of projected 2030 population density across Lusaka District, highest around the city core and northern settlements" loading="lazy"></button>
-        <h3>Population density, Lusaka District</h3>
-        <p>Projected 2030 population density from the Global Human Settlement Layer, clipped to the DMMU district boundary. Compact zones around the city core and northern settlements reach more than 900 people per 100 m cell. Colour ramps, raster statistics and display resampling were tuned so the dense core and the sparse edges read clearly on one map.</p>
-        <dl class="meta"><dt>Data</dt><dd>GHS-POP R2023A, epoch 2030 · DMMU ADM2 boundary</dd><dt>Software</dt><dd>ArcGIS</dd></dl>
+
+      <article class="project">
+        <div class="project-media">
+          <button class="shot shot-main zoom" type="button" data-caption="The rivers of Zambia · HydroSHEDS"><img src="img/maps/rivers-zambia.webp" alt="Dark-themed map of Zambia’s river network in glowing blue" loading="lazy"></button>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Jul 2026 · Cartography</p>
+          <h3>Rivers of Zambia</h3>
+          <p>Zambia’s drainage network from HydroSHEDS, styled on a dark background so the main rivers stand out against thousands of tributaries.</p>
+          <dl class="meta"><dt>Data</dt><dd>HydroSHEDS</dd><dt>Software</dt><dd>QGIS 4.0</dd></dl>
+        </div>
       </article>
-      <article class="map-card">
-        <button class="plate plate-img zoom" type="button" data-caption="Soil map of Zambia, FAO classification · FAO Digital Soil Map of the World"><img src="img/maps/zambia-soils-fao.webp" alt="Soil map of Zambia showing FAO soil units with a full legend" loading="lazy"></button>
-        <h3>Soil map of Zambia</h3>
-        <p>Zambia’s soil units mapped from the FAO Digital Soil Map of the World using the FAO classification. Next, the soil layer will be combined with land cover, elevation and NDVI to study how soils, vegetation, terrain and land degradation relate.</p>
-        <dl class="meta"><dt>Data</dt><dd>FAO Digital Soil Map of the World</dd><dt>Projection</dt><dd>WGS 84 / UTM Zone 35S · Aug 2026</dd></dl>
+
+      <article class="project">
+        <div class="project-media">
+          <figure class="chart" aria-label="Change in class area: built-up plus 40.51 percent, agriculture plus 25.72 percent, tree cover minus 10.16 percent">
+          <figcaption>Change in class area, 2019–2024</figcaption>
+          <div class="row">
+          <span class="row-label">Built-up</span>
+          <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-built" style="left:25%;width:67.52%"></span></span>
+          <span class="row-val">+40.51%</span>
+          </div>
+          <div class="row">
+          <span class="row-label">Agriculture</span>
+          <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-agri" style="left:25%;width:42.87%"></span></span>
+          <span class="row-val">+25.72%</span>
+          </div>
+          <div class="row">
+          <span class="row-label">Tree cover</span>
+          <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-tree" style="left:8.07%;width:16.93%"></span></span>
+          <span class="row-val">−10.16%</span>
+          </div>
+          <div class="row axis" aria-hidden="true">
+          <span></span>
+          <span class="track">
+          <span class="tick" style="left:8.33%">−10</span>
+          <span class="tick" style="left:25%">0</span>
+          <span class="tick" style="left:58.33%">+20</span>
+          <span class="tick" style="left:91.67%">+40</span>
+          </span>
+          <span></span>
+          </div>
+          </figure>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Change detection</p>
+          <h3>Land cover change, 2019–2024</h3>
+          <p>Compared classified land cover for 2019, 2023 and 2024 from 10 m Sentinel-2 imagery. Built-up land and farmland expanded sharply while tree cover fell by about a tenth. A separate comparison extends the record from 2013 to 2026.</p>
+          <dl class="meta"><dt>Data</dt><dd>Sentinel-2 · Esri 10 m Land Cover</dd><dt>Years</dt><dd>2019, 2023, 2024</dd></dl>
+        </div>
       </article>
-      <article class="map-card">
-        <button class="plate plate-img zoom" type="button" data-caption="The rivers of Zambia · HydroSHEDS"><img src="img/maps/rivers-zambia.webp" alt="Dark-themed map of Zambia's river network in glowing blue" loading="lazy"></button>
-        <h3>Rivers of Zambia</h3>
-        <p>Zambia’s drainage network from HydroSHEDS, styled on a dark background so the main rivers stand out against thousands of tributaries.</p>
-        <dl class="meta"><dt>Data</dt><dd>HydroSHEDS</dd><dt>Software</dt><dd>QGIS 4.0</dd></dl>
+
+      <article class="project">
+        <div class="project-media">
+          <div class="plate plate-fireloss" role="img" aria-label="Decorative hatch pattern"><span class="plate-label">GLAD UMD · fire-driven forest loss</span></div>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Fire</p>
+          <h3>Forest loss from fire, Zambia</h3>
+          <p>Forest loss attributed to fire across Zambia, mapped from the University of Maryland GLAD lab’s global fire-driven forest loss dataset.</p>
+          <dl class="meta"><dt>Software</dt><dd>QGIS</dd></dl>
+        </div>
       </article>
-      <article class="map-card">
-        <div class="plate plate-fireloss" role="img" aria-label="Decorative hatch pattern"><span class="plate-label">GLAD UMD · fire-driven forest loss</span></div>
-        <h3>Forest loss from fire, Zambia</h3>
-        <p>Forest loss attributed to fire across Zambia, mapped from the University of Maryland GLAD lab’s global fire-driven forest loss dataset.</p>
-        <dl class="meta"><dt>Software</dt><dd>QGIS</dd></dl>
-      </article>
-      <article class="map-card">
-        <div class="plate plate-fire" role="img" aria-label="Decorative ring pattern"><span class="plate-label">MODIS · FAO EarthMap</span></div>
-        <h3>Zambia fire infographic</h3>
-        <p>A one-page summary of fire activity across Zambia, built from MODIS observations in FAO’s EarthMap platform.</p>
-        <dl class="meta"><dt>Platform</dt><dd>FAO EarthMap</dd></dl>
+
+      <article class="project">
+        <div class="project-media">
+          <div class="plate plate-fire" role="img" aria-label="Decorative ring pattern"><span class="plate-label">MODIS · FAO EarthMap</span></div>
+        </div>
+        <div class="project-body">
+          <p class="eyebrow">Fire</p>
+          <h3>Zambia fire infographic</h3>
+          <p>A one-page summary of fire activity across Zambia, built from MODIS observations in FAO’s EarthMap platform.</p>
+          <dl class="meta"><dt>Platform</dt><dd>FAO EarthMap</dd></dl>
+        </div>
       </article>
     </div>
   </section>
