@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stanley Sampa Portfolio</title>
+<meta name="description" content="Stanley Sampa: field ecologist and GIS analyst in Zambia. Maps, remote sensing analyses, research and certificates.">
+<meta property="og:title" content="Stanley Sampa · GIS and field ecology">
+<meta property="og:description" content="Maps, remote sensing analyses and research on fire, land cover and protected areas in Zambia.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%232D6A45'/%3E%3Ctext x='16' y='21.5' font-family='Arial,sans-serif' font-size='14' font-weight='700' fill='%23F0F3EE' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: a topographic map sheet. Double neat-line hero over generated contours, then one 1120px column of sections, each opened by a collar rule with a mono label. */
+:root{
+  --paper:#F0F3EE;
+  --panel:#E4EAE3;
+  --ink:#15201B;
+  --muted:#4D5D55;
+  --rule:#C3CEC6;
+  --leaf:#2D6A45;
+  --burn:#B4561F;
+  --on-leaf:#F3F6F1;
+  --contour:rgba(45,106,69,.20);
+  --contour-index:rgba(45,106,69,.42);
+  --display:"Archivo","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1512; --panel:#18211D; --ink:#E1E8E2; --muted:#9DABA3; --rule:#2B3732;
+    --leaf:#7DC291; --burn:#E58C50; --on-leaf:#0F1512;
+    --contour:rgba(125,194,145,.14); --contour-index:rgba(125,194,145,.32);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1512; --panel:#18211D; --ink:#E1E8E2; --muted:#9DABA3; --rule:#2B3732;
+  --leaf:#7DC291; --burn:#E58C50; --on-leaf:#0F1512;
+  --contour:rgba(125,194,145,.14); --contour-index:rgba(125,194,145,.32);
+  color-scheme:dark;
+}
+
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--leaf);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+p{margin:0}
+
+.wrap{max-width:1120px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+
+/* Top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper);background:color-mix(in srgb,var(--paper) 90%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.brand{font-family:var(--display);font-stretch:125%;font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.78rem;text-decoration:none;white-space:nowrap}
+.topbar nav{display:flex;gap:18px;min-width:0}
+.topbar nav a{font-family:var(--display);font-size:.84rem;font-weight:500;color:var(--muted);text-decoration:none;white-space:nowrap}
+.topbar nav a:hover{color:var(--leaf)}
+@media (max-width:480px){.nav-wide{display:none}}
+
+/* Labels */
+.eyebrow{font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+
+/* Hero map sheet */
+.hero{padding-block:clamp(20px,4vw,40px) 0}
+.sheet{border:2px solid var(--ink);padding:5px}
+.frame{position:relative;border:1px solid var(--ink);overflow:hidden}
+#contours{position:absolute;inset:0;width:100%;height:100%;display:block;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.35),#000 85%);mask-image:linear-gradient(180deg,rgba(0,0,0,.35),#000 85%)}
+@media (min-width:760px){
+  #contours{-webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.25) 0%,#000 58%);mask-image:linear-gradient(90deg,rgba(0,0,0,.25) 0%,#000 58%)}
+}
+.sheet-inner{position:relative;display:grid;gap:22px;padding:clamp(22px,5vw,60px) clamp(20px,5vw,60px) clamp(28px,5vw,56px)}
+.hero h1{font-stretch:125%;font-weight:850;text-transform:uppercase;font-size:clamp(2.5rem,9.5vw,6.4rem);line-height:.9;letter-spacing:.005em}
+.lede{font-size:clamp(1.15rem,2.2vw,1.45rem);line-height:1.45;max-width:32ch}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{font-family:var(--display);font-weight:600;font-size:.92rem;text-decoration:none;padding:10px 16px;border:1.5px solid var(--ink);border-radius:2px;background:var(--paper)}
+.btn-primary{background:var(--leaf);border-color:var(--leaf);color:var(--on-leaf)}
+.btn:hover{border-color:var(--leaf)}
+.collar{position:relative;display:grid;grid-template-columns:1fr;border-top:1px solid var(--ink);background:var(--paper);margin:0}
+.collar div{padding:12px clamp(20px,3vw,24px);min-width:0}
+.collar div + div{border-top:1px solid var(--rule)}
+.collar dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.collar dd{margin:2px 0 0;font-family:var(--display);font-size:.92rem;font-weight:500;line-height:1.35}
+@media (min-width:760px){
+  .collar{grid-template-columns:repeat(3,1fr)}
+  .collar div + div{border-top:0;border-left:1px solid var(--rule)}
+}
+
+/* Sections */
+.section{padding-block:clamp(56px,8vw,96px) 0;scroll-margin-top:60px}
+.sec-head{display:grid;gap:8px;border-top:2px solid var(--ink);padding-top:14px;margin-bottom:clamp(24px,4vw,36px)}
+.sec-head h2{font-stretch:112%;font-weight:750;font-size:clamp(1.6rem,3.6vw,2.4rem);line-height:1.1}
+h3{font-weight:700;font-size:1.22rem;line-height:1.25}
+.muted{color:var(--muted)}
+
+/* Featured analyses */
+.feature-grid{display:grid;grid-template-columns:1fr;gap:24px}
+@media (min-width:900px){.feature-grid{grid-template-columns:1fr 1fr}}
+.analysis{display:grid;gap:14px;align-content:start;background:var(--panel);border:1px solid var(--rule);padding:clamp(18px,3vw,28px);min-width:0}
+.analysis p{max-width:62ch}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:4px 0 0;font-size:.86rem}
+.meta dt{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.meta dd{margin:0;min-width:0}
+
+/* Bar charts, drawn to scale with percentage widths */
+.chart{margin:6px 0 0;display:grid;gap:10px;font-variant-numeric:tabular-nums}
+.chart figcaption{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.row{display:grid;grid-template-columns:5.6rem minmax(0,1fr) 4.4rem;align-items:center;gap:10px}
+.row-label{font-family:var(--display);font-size:.86rem;font-weight:600}
+.row-val{font-family:var(--mono);font-size:.82rem;text-align:right}
+.track{position:relative;height:16px}
+.bar{position:absolute;top:0;bottom:0}
+.zero{position:absolute;top:-4px;bottom:-4px;width:0;border-left:1.5px solid var(--ink)}
+.c-built{background:var(--muted)}
+.c-agri{background:var(--burn)}
+.c-tree{background:var(--leaf)}
+.c-then{background:var(--muted)}
+.c-now{background:var(--leaf)}
+.axis .track{height:18px;border-top:1px solid var(--rule)}
+.tick{position:absolute;top:4px;font-family:var(--mono);font-size:.68rem;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
+.tick.start{transform:none}
+.tick.end{transform:translateX(-100%)}
+.tick::before{content:"";position:absolute;top:-5px;left:50%;height:4px;border-left:1px solid var(--rule)}
+.tick.start::before{left:0}
+.tick.end::before{left:100%}
+
+/* Gwembe case study */
+.case{display:grid;gap:24px;background:var(--panel);border:1px solid var(--rule);padding:clamp(18px,3vw,32px);margin-bottom:24px;min-width:0}
+.case-head{display:grid;gap:10px}
+.case-title{font-stretch:112%;font-weight:750;font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.15}
+.case-head p{max-width:70ch}
+.case-maps{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:700px){.case-maps{grid-template-columns:1fr 1fr}}
+.map-fig{position:relative;margin:0;border:1px solid var(--rule);background:var(--paper);padding:8px;min-width:0}
+.map-fig img{display:block;width:100%;height:auto;max-width:100%}
+.map-fig figcaption{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:.8rem;font-weight:500;background:var(--paper);border:1px solid var(--ink);padding:2px 8px}
+.legend-dw{list-style:none;display:flex;flex-wrap:wrap;gap:6px 16px;margin:0;padding:0;font-family:var(--display);font-size:.82rem}
+.legend-dw li{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;display:inline-block;border-radius:1px;flex:none}
+.case-stats{display:grid;grid-template-columns:1fr;gap:28px}
+@media (min-width:880px){.case-stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px}}
+.case-stats > div{display:grid;gap:10px;align-content:start;min-width:0}
+.table-wrap{overflow-x:auto}
+table.area{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.92rem}
+table.area th{font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right;padding:0 0 8px 12px;border-bottom:1.5px solid var(--ink)}
+table.area th:first-child,table.area td:first-child{text-align:left;padding-left:0}
+table.area td{font-family:var(--mono);text-align:right;padding:9px 0 9px 12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.area td:first-child{font-family:var(--display);font-weight:600}
+.row.wide{grid-template-columns:7.4rem minmax(0,1fr) 3rem}
+@media (max-width:480px){.t-minor{display:none}}
+.national{display:grid;gap:12px;border-top:1px solid var(--rule);padding-top:22px}
+.national h4{font-family:var(--display);font-size:1.08rem;font-weight:700;margin:0}
+.national p{max-width:70ch;font-size:.98rem}
+
+/* Map cards */
+.maps{display:grid;grid-template-columns:1fr;gap:28px;margin-top:36px}
+@media (min-width:700px){.maps{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 24px}}
+.map-card{display:grid;gap:12px;align-content:start;min-width:0}
+.plate{position:relative;aspect-ratio:3/2;max-width:100%;background:var(--panel);border:1px solid var(--rule);overflow:hidden}
+.plate-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px;box-sizing:border-box}
+.plate::before{content:"";position:absolute;inset:0}
+.plate-density::before{background-image:radial-gradient(circle,var(--leaf) 1.4px,transparent 1.9px);background-size:9px 9px;
+  -webkit-mask-image:radial-gradient(circle at 56% 44%,#000 0,#000 14%,rgba(0,0,0,.45) 38%,transparent 68%);mask-image:radial-gradient(circle at 56% 44%,#000 0,#000 14%,rgba(0,0,0,.45) 38%,transparent 68%)}
+.plate-fireloss::before{background-image:repeating-linear-gradient(135deg,var(--burn) 0 1.6px,transparent 1.6px 7px);
+  -webkit-mask-image:radial-gradient(closest-side at 28% 38%,#000 55%,transparent),radial-gradient(closest-side at 66% 62%,#000 45%,transparent),radial-gradient(closest-side at 78% 26%,#000 35%,transparent);
+  mask-image:radial-gradient(closest-side at 28% 38%,#000 55%,transparent),radial-gradient(closest-side at 66% 62%,#000 45%,transparent),radial-gradient(closest-side at 78% 26%,#000 35%,transparent);
+  -webkit-mask-size:60% 70%,55% 65%,35% 40%;mask-size:60% 70%,55% 65%,35% 40%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:5% 10%,80% 90%,95% 8%;mask-position:5% 10%,80% 90%,95% 8%}
+.plate-fire::before{background-image:repeating-radial-gradient(circle at 64% 58%,var(--burn) 0 1.3px,transparent 1.3px 11px);
+  -webkit-mask-image:radial-gradient(circle at 64% 58%,#000 0,#000 30%,transparent 72%);mask-image:radial-gradient(circle at 64% 58%,#000 0,#000 30%,transparent 72%)}
+.plate-label{position:absolute;left:10px;bottom:10px;max-width:calc(100% - 20px);font-family:var(--mono);font-size:.7rem;line-height:1.3;background:var(--paper);border:1px solid var(--rule);padding:4px 7px}
+.map-card p{font-size:.98rem}
+
+/* Research */
+.research{display:grid;grid-template-columns:1fr;gap:0}
+.study{display:grid;gap:12px;padding-block:24px;border-bottom:1px solid var(--rule);min-width:0}
+.study:first-child{padding-top:0}
+@media (min-width:860px){
+  .study{grid-template-columns:15rem minmax(0,1fr);gap:12px 40px}
+  .study-side{grid-row:span 4}
+}
+.status{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--leaf);color:var(--leaf);border-radius:2px}
+.study-side{display:grid;gap:8px;align-content:start}
+.study-side .site{font-family:var(--display);font-size:.9rem;font-weight:500;color:var(--muted)}
+.study p{max-width:66ch}
+.chips{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.chips li{font-family:var(--display);font-size:.8rem;font-weight:500;padding:3px 9px;border:1px solid var(--rule);border-radius:2px;background:var(--paper)}
+
+/* Sites locator */
+.sites{display:grid;grid-template-columns:1fr;gap:28px;align-items:start}
+@media (min-width:820px){.sites{grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:48px}}
+.locator{margin:0;display:grid;gap:10px}
+.locator svg{display:block;width:100%;height:auto;max-width:420px}
+.g-minor{stroke:var(--rule);stroke-width:.6;fill:none}
+.g-major{stroke:var(--rule);stroke-width:1.2;fill:none}
+.g-frame{stroke:var(--ink);stroke-width:1.2;fill:none}
+.g-lab{fill:var(--muted);font-family:var(--mono);font-size:10.5px}
+.pt-r{fill:var(--leaf)}
+.pt-f{fill:var(--paper);stroke:var(--ink);stroke-width:2}
+.pt-lab{fill:var(--ink);font-family:var(--display);font-size:12.5px;font-weight:600;paint-order:stroke;stroke:var(--paper);stroke-width:3.5px;stroke-linejoin:round}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--display);font-size:.82rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.key{width:11px;height:11px;border-radius:50%;display:inline-block}
+.key-r{background:var(--leaf)}
+.key-f{background:var(--paper);border:2px solid var(--ink)}
+.locator figcaption{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.site-list{list-style:none;margin:0;padding:0;display:grid}
+.site-list li{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding-block:14px;border-bottom:1px solid var(--rule)}
+.site-list li:first-child{border-top:1px solid var(--rule)}
+.site-list .place{font-family:var(--display);font-weight:700;font-size:1.02rem}
+.site-list .coord{font-family:var(--mono);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.site-list .what{font-size:.96rem}
+
+/* Experience */
+.timeline{list-style:none;margin:0;padding:0;display:grid}
+.timeline li{display:grid;gap:6px;padding-block:22px;border-bottom:1px solid var(--rule)}
+.timeline li:first-child{padding-top:0}
+@media (min-width:760px){.timeline li{grid-template-columns:11rem minmax(0,1fr);gap:4px 32px}.timeline .when{grid-row:span 3}}
+.when{font-family:var(--mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
+.org{font-family:var(--display);font-size:.92rem;font-weight:500;color:var(--muted)}
+.timeline p{max-width:66ch}
+
+/* Education, training, toolkit */
+.two-col{display:grid;grid-template-columns:1fr;gap:36px}
+@media (min-width:820px){.two-col{grid-template-columns:1fr 1fr;gap:48px}}
+.col-title{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.creds{list-style:none;margin:0;padding:0;display:grid}
+.creds li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding-block:14px;border-bottom:1px solid var(--rule)}
+.creds .c-name{font-family:var(--display);font-weight:650;font-size:1rem;line-height:1.3}
+.creds .c-org{grid-column:1;font-size:.94rem;color:var(--muted)}
+.creds .c-date{grid-column:2;grid-row:1;font-family:var(--mono);font-size:.78rem;color:var(--muted);white-space:nowrap;padding-top:2px}
+.toolkit{display:grid;grid-template-columns:1fr;gap:28px;margin-top:clamp(40px,6vw,56px)}
+@media (min-width:640px){.toolkit{grid-template-columns:1fr 1fr}}
+@media (min-width:1000px){.toolkit{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.toolkit > div{display:grid;gap:10px;align-content:start;min-width:0}
+
+/* Contact */
+.contact{display:grid;gap:18px}
+.contact p{max-width:52ch}
+.contact-list{display:grid;margin:0;max-width:680px}
+.contact-list > div{display:grid;grid-template-columns:6.2rem minmax(0,1fr);gap:4px 16px;align-items:center;padding-block:14px;border-bottom:1px solid var(--rule)}
+.contact-list > div:first-child{border-top:1px solid var(--rule)}
+.contact-list dt{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.contact-list dd{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;min-width:0}
+.contact-val{font-family:var(--mono);font-size:clamp(.92rem,2.6vw,1.12rem);font-weight:500;overflow-wrap:anywhere;user-select:all;-webkit-user-select:all}
+.contact-list a{font-family:var(--mono);font-size:clamp(.88rem,2.4vw,1.02rem);color:var(--leaf);overflow-wrap:anywhere}
+.contact-place{font-family:var(--display);font-weight:500}
+
+/* About */
+.about{display:grid;grid-template-columns:1fr;gap:28px}
+@media (min-width:860px){.about{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:48px}}
+.bio{display:grid;gap:14px;align-content:start}
+.bio p{max-width:64ch}
+.summary{display:grid;gap:12px;align-content:start;background:var(--panel);border:1px solid var(--rule);padding:clamp(18px,3vw,26px)}
+.summary p{font-size:1rem}
+
+/* Degrees and certificates */
+@media (min-width:820px){.creds.degrees{grid-template-columns:1fr 1fr;column-gap:48px}}
+.cert-head{display:grid;gap:6px;margin-top:clamp(40px,6vw,56px)}
+.cert-head p{max-width:64ch;font-size:.96rem}
+.cert-grid{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,158px),1fr));gap:22px 16px}
+.cert{display:grid;gap:8px;align-content:start;min-width:0}
+.cert-thumb{display:block;width:100%;max-width:100%;aspect-ratio:4/3;box-sizing:border-box;padding:6px;margin:0;background:var(--panel);border:1px solid var(--rule);border-radius:0;cursor:zoom-in;font:inherit;color:inherit}
+.cert-thumb img{display:block;width:100%;height:100%;object-fit:contain}
+.cert-thumb:hover{border-color:var(--leaf)}
+.cert-name{font-family:var(--display);font-weight:650;font-size:.9rem;line-height:1.3}
+.cert-meta{font-family:var(--mono);font-size:.7rem;line-height:1.45;color:var(--muted)}
+dialog.viewer{border:1px solid var(--ink);padding:0;width:min(94vw,980px);max-width:94vw;background:var(--paper);color:var(--ink)}
+dialog.viewer::backdrop{background:rgba(8,14,11,.74)}
+.viewer-inner{display:grid;gap:10px;padding:12px}
+.viewer-bar{display:flex;justify-content:space-between;align-items:start;gap:12px}
+#viewer-cap{font-family:var(--display);font-weight:600;font-size:.95rem;line-height:1.35}
+.viewer img{display:block;width:100%;height:auto;max-height:76vh;object-fit:contain;background:#fff}
+.copy{font-family:var(--display);font-weight:600;font-size:.88rem;padding:9px 14px;border:1.5px solid var(--ink);border-radius:2px;background:var(--paper);color:var(--ink);cursor:pointer}
+.copy:hover{border-color:var(--leaf);color:var(--leaf)}
+
+/* Upcoming projects */
+.upcoming{display:grid;grid-template-columns:1fr;gap:20px}
+@media (min-width:900px){.upcoming{grid-template-columns:1fr 1fr;gap:24px}}
+.proj{display:grid;gap:12px;align-content:start;background:var(--panel);border:1px solid var(--rule);padding:clamp(18px,3vw,26px);min-width:0}
+.proj-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.status-up{border-color:var(--burn);color:var(--burn)}
+.proj .q{font-style:italic;font-size:1rem;max-width:60ch}
+.proj .col-title{margin:4px 0 0}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:step}
+.steps li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;font-size:.95rem;line-height:1.5}
+.steps li::before{counter-increment:step;content:counter(step);display:grid;place-items:center;width:1.45rem;height:1.45rem;margin-top:1px;border:1px solid var(--ink);border-radius:50%;font-family:var(--mono);font-size:.7rem}
+.tool{display:inline-block;margin-right:6px;padding:0 6px;border:1px solid var(--rule);background:var(--paper);font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;line-height:1.6;white-space:nowrap;vertical-align:1px}
+
+/* Footer collar */
+footer{margin-top:clamp(64px,9vw,104px);border-top:2px solid var(--ink)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-block:16px 28px;font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">Stanley Sampa</a>
+    <nav aria-label="Sections">
+      <a class="nav-wide" href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#research">Research</a>
+      <a class="nav-wide" href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero wrap" id="top">
+  <div class="sheet">
+    <div class="frame">
+      <canvas id="contours" aria-hidden="true"></canvas>
+      <div class="sheet-inner">
+        <p class="eyebrow">GIS · Remote sensing · Field ecology</p>
+        <h1>Stanley<br>Sampa</h1>
+        <p class="lede">I use satellite data and fieldwork to understand how fire, rainfall and land use are changing Zambia’s Miombo woodlands and farmland.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#work">See the work</a>
+          <a class="btn" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <dl class="collar">
+        <div><dt>Based in</dt><dd>Munyumbwe, Gwembe District, Zambia</dd></div>
+        <div><dt>Currently</dt><dd>District Facilitator, NAT-ZGF CSSF Project</dd></div>
+        <div><dt>Studying</dt><dd>MSc Tropical Ecology &amp; Biodiversity Management, Copperbelt University</dd></div>
+      </dl>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section wrap" id="about">
+    <div class="sec-head">
+      <p class="eyebrow">About</p>
+      <h2>Field ecologist and GIS analyst</h2>
+    </div>
+    <div class="about">
+      <div class="bio">
+        <p class="col-title">Bio</p>
+        <p>Stanley Sampa is a Zambian field ecologist and GIS analyst based in Munyumbwe, Gwembe District. He combines satellite data with fieldwork to track how fire, rainfall and land use are changing Miombo woodlands and farmland, and he works alongside the communities who depend on them.</p>
+        <p>He is District Facilitator on the NAT-ZGF CSSF Project, supporting Farmer Field Schools with climate-smart agriculture and group governance. He is also Training Manager at Tuskline Wildlife Research and Training Institute, where he trains field teams in SMART, camera-trap monitoring and spatial data workflows, and Administrative Director of Know Your Wildlife and the Environment Zambia (KWEZI). Earlier, he worked as a PlantVillage field technician with ZARI in Kapiri Mposhi and surveyed Miombo inventory plots in the Kasanka landscape.</p>
+        <p>He holds a BSc in Agroforestry from Copperbelt University and is completing an MSc in Tropical Ecology and Biodiversity Management there. His research looks at how seasonal fire regimes shape canopy structure in Nsumbu National Park.</p>
+      </div>
+      <aside class="summary" aria-label="Professional summary">
+        <p class="col-title">Professional summary</p>
+        <p>Field ecologist and GIS analyst working across wildlife, forestry and agricultural systems in Zambia. I run spatial analyses in ArcGIS Pro, QGIS, Google Earth Engine and R, including land cover change detection, least-cost path modelling and vegetation index analysis. I collect the field data behind them with camera traps, vegetation plots, GPS, ODK/KoBo and SMART. I also train field teams and farmer groups, and manage community programmes from planning through to reporting.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section wrap" id="work">
+    <div class="sec-head">
+      <p class="eyebrow">Selected work</p>
+      <h2>Maps and spatial analyses</h2>
+    </div>
+
+    <article class="case">
+      <div class="case-head">
+        <p class="eyebrow">Case study · Sentinel-2 Dynamic World</p>
+        <h3 class="case-title">Gwembe District, 2017 to 2026</h3>
+        <p>Gwembe runs from the Zambezi escarpment down to the shores of Lake Kariba, and it is where I work with farmer groups. I compared Dynamic World land cover for 2017 and 2026 across the district’s 3,670 km², about 645 km² of it lake, and traced which classes turned into which.</p>
+        <p>Over nine years, 303 km² of tree cover became shrub and scrub while 168 km² went the other way. Overall, tree cover fell from 1,885 km² to 1,749 km². Built-up land roughly doubled, and most new settlement was built on former scrubland.</p>
+      </div>
+
+      <div class="case-maps">
+        <figure class="map-fig">
+          <img src="img/gwembe-landcover-2017.webp" width="1400" height="926" alt="Land cover map of Gwembe District in 2017, dominated by tree cover with bands of shrub and scrub, and Lake Kariba to the south-east" loading="lazy">
+          <figcaption>2017</figcaption>
+        </figure>
+        <figure class="map-fig">
+          <img src="img/gwembe-landcover-2026.webp" width="1400" height="926" alt="Land cover map of Gwembe District in 2026, showing wider bands of shrub and scrub than in 2017" loading="lazy">
+          <figcaption>2026</figcaption>
+        </figure>
+      </div>
+      <ul class="legend-dw" aria-label="Map legend">
+        <li><i class="sw" style="background:#397d49"></i>Trees</li>
+        <li><i class="sw" style="background:#dfc35a"></i>Shrub and scrub</li>
+        <li><i class="sw" style="background:#e49635"></i>Crops</li>
+        <li><i class="sw" style="background:#c4281b"></i>Built-up</li>
+        <li><i class="sw" style="background:#88b053"></i>Grass</li>
+        <li><i class="sw" style="background:#7a87c6"></i>Flooded vegetation</li>
+        <li><i class="sw" style="background:#a59b8f"></i>Bare ground</li>
+        <li><i class="sw" style="background:#419bdf"></i>Water</li>
+      </ul>
+
+      <div class="case-stats">
+        <div>
+          <p class="col-title">Class area, km²</p>
+          <div class="table-wrap">
+            <table class="area">
+              <thead><tr><th scope="col">Class</th><th scope="col">2017</th><th scope="col">2026</th><th scope="col">Change</th></tr></thead>
+              <tbody>
+                <tr><td>Trees</td><td>1,885</td><td>1,749</td><td>−7.2%</td></tr>
+                <tr><td>Shrub and scrub</td><td>1,018</td><td>1,175</td><td>+15.3%</td></tr>
+                <tr><td>Crops</td><td>49.1</td><td>41.3</td><td>−15.7%</td></tr>
+                <tr><td>Built-up</td><td>3.2</td><td>6.6</td><td>+107%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <figure class="chart" aria-label="Largest land cover conversions in km²: trees to scrub 303, scrub to trees 168, crops to scrub 26, scrub to crops 14.5, scrub to built-up 3.5">
+          <figcaption>Largest conversions, 2017 to 2026, km²</figcaption>
+          <div class="row wide">
+            <span class="row-label">Trees → scrub</span>
+            <span class="track"><span class="bar" style="left:0;width:94.75%;background:#dfc35a"></span></span>
+            <span class="row-val">303</span>
+          </div>
+          <div class="row wide">
+            <span class="row-label">Scrub → trees</span>
+            <span class="track"><span class="bar" style="left:0;width:52.59%;background:#397d49"></span></span>
+            <span class="row-val">168</span>
+          </div>
+          <div class="row wide">
+            <span class="row-label">Crops → scrub</span>
+            <span class="track"><span class="bar" style="left:0;width:8.13%;background:#dfc35a"></span></span>
+            <span class="row-val">26.0</span>
+          </div>
+          <div class="row wide">
+            <span class="row-label">Scrub → crops</span>
+            <span class="track"><span class="bar" style="left:0;width:4.52%;background:#e49635"></span></span>
+            <span class="row-val">14.5</span>
+          </div>
+          <div class="row wide">
+            <span class="row-label">Scrub → built-up</span>
+            <span class="track"><span class="bar" style="left:0;width:1.08%;background:#c4281b"></span></span>
+            <span class="row-val">3.5</span>
+          </div>
+          <div class="row wide axis" aria-hidden="true">
+            <span></span>
+            <span class="track">
+              <span class="tick start" style="left:0">0</span>
+              <span class="tick t-minor" style="left:25%">80</span>
+              <span class="tick" style="left:50%">160</span>
+              <span class="tick t-minor" style="left:75%">240</span>
+              <span class="tick end" style="left:100%">320</span>
+            </span>
+            <span></span>
+          </div>
+        </figure>
+      </div>
+
+      <div class="national">
+        <p class="eyebrow">National context</p>
+        <h4>Tree cover change across Zambia</h4>
+        <figure class="chart" aria-label="Zambia Dynamic World tree class, 2017 to 2026: gross loss 6.39 million hectares, gross gain 6.23 million hectares">
+          <figcaption>Dynamic World tree class, 2017–2026, million ha</figcaption>
+          <div class="row">
+            <span class="row-label">Gross loss</span>
+            <span class="track"><span class="bar c-agri" style="left:0;width:91.3%"></span></span>
+            <span class="row-val">6.39</span>
+          </div>
+          <div class="row">
+            <span class="row-label">Gross gain</span>
+            <span class="track"><span class="bar c-tree" style="left:0;width:88.96%"></span></span>
+            <span class="row-val">6.23</span>
+          </div>
+          <div class="row axis" aria-hidden="true">
+            <span></span>
+            <span class="track">
+              <span class="tick start" style="left:0">0</span>
+              <span class="tick" style="left:28.57%">2</span>
+              <span class="tick" style="left:57.14%">4</span>
+              <span class="tick" style="left:85.71%">6</span>
+            </span>
+            <span></span>
+          </div>
+        </figure>
+        <p>Between 2017 and 2026, gross losses and gains in Zambia’s tree class nearly cancel out, leaving a net loss of about 164,000 ha. A separate loss layer puts tree loss for 2017–2024 at 1.39 million ha.</p>
+      </div>
+    </article>
+
+    <div class="feature-grid">
+      <article class="analysis">
+        <p class="eyebrow">Change detection</p>
+        <h3>Land cover change, 2019–2024</h3>
+        <p>Compared classified land cover for 2019, 2023 and 2024 from 10 m Sentinel-2 imagery. Built-up land and farmland expanded sharply while tree cover fell by about a tenth. A separate comparison extends the record from 2013 to 2026.</p>
+        <figure class="chart" aria-label="Change in class area: built-up plus 40.51 percent, agriculture plus 25.72 percent, tree cover minus 10.16 percent">
+          <figcaption>Change in class area, 2019–2024</figcaption>
+          <div class="row">
+            <span class="row-label">Built-up</span>
+            <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-built" style="left:25%;width:67.52%"></span></span>
+            <span class="row-val">+40.51%</span>
+          </div>
+          <div class="row">
+            <span class="row-label">Agriculture</span>
+            <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-agri" style="left:25%;width:42.87%"></span></span>
+            <span class="row-val">+25.72%</span>
+          </div>
+          <div class="row">
+            <span class="row-label">Tree cover</span>
+            <span class="track"><span class="zero" style="left:25%"></span><span class="bar c-tree" style="left:8.07%;width:16.93%"></span></span>
+            <span class="row-val">−10.16%</span>
+          </div>
+          <div class="row axis" aria-hidden="true">
+            <span></span>
+            <span class="track">
+              <span class="tick" style="left:8.33%">−10</span>
+              <span class="tick" style="left:25%">0</span>
+              <span class="tick" style="left:58.33%">+20</span>
+              <span class="tick" style="left:91.67%">+40</span>
+            </span>
+            <span></span>
+          </div>
+        </figure>
+        <dl class="meta">
+          <dt>Data</dt><dd>Sentinel-2 · Esri 10 m Land Cover</dd>
+          <dt>Years</dt><dd>2019, 2023, 2024</dd>
+        </dl>
+      </article>
+
+      <article class="analysis">
+        <p class="eyebrow">Connectivity</p>
+        <h3>Least-cost path, Nsumbu National Park</h3>
+        <p>Modelled the optimal route across the park for two periods. As land cover shifted between 2013 and 2026, the least-cost route grew from 15 km to 71.6 km, nearly five times longer.</p>
+        <figure class="chart" aria-label="Optimal route length: 15 kilometres in 2013, 71.6 kilometres in 2026">
+          <figcaption>Optimal route length, km</figcaption>
+          <div class="row">
+            <span class="row-label">2013</span>
+            <span class="track"><span class="bar c-then" style="left:0;width:18.75%"></span></span>
+            <span class="row-val">15 km</span>
+          </div>
+          <div class="row">
+            <span class="row-label">2026</span>
+            <span class="track"><span class="bar c-now" style="left:0;width:89.5%"></span></span>
+            <span class="row-val">71.6 km</span>
+          </div>
+          <div class="row axis" aria-hidden="true">
+            <span></span>
+            <span class="track">
+              <span class="tick start" style="left:0">0</span>
+              <span class="tick" style="left:25%">20</span>
+              <span class="tick" style="left:50%">40</span>
+              <span class="tick" style="left:75%">60</span>
+              <span class="tick end" style="left:100%">80</span>
+            </span>
+            <span></span>
+          </div>
+        </figure>
+        <dl class="meta">
+          <dt>Method</dt><dd>Cost-surface least-cost path analysis</dd>
+          <dt>Periods</dt><dd>2013 and 2026 land cover</dd>
+        </dl>
+      </article>
+    </div>
+
+    <div class="maps">
+      <article class="map-card">
+        <div class="plate plate-img"><img src="img/gwembe-terrain.webp" width="1400" height="926" alt="Shaded relief map of Gwembe District, with the escarpment in the north-west, ridges running south-west to north-east, and Lake Kariba in the south-east" loading="lazy"><span class="plate-label">30 m DEM · Gwembe District</span></div>
+        <h3>Terrain of the Gwembe Valley</h3>
+        <p>Shaded relief from about 480 m at the Lake Kariba shoreline to 1,345 m on the escarpment in the north-west. Ridges run south-west to north-east across the valley floor.</p>
+        <dl class="meta"><dt>Data</dt><dd>30 m elevation model, clipped to the district</dd></dl>
+      </article>
+      <article class="map-card">
+        <div class="plate plate-density" role="img" aria-label="Decorative dot pattern"><span class="plate-label">GHS-POP R2023A · epoch 2030</span></div>
+        <h3>Population density, Lusaka District</h3>
+        <p>Population density across Lusaka District from the Global Human Settlement Layer’s 2030 projection. Colour ramps, raster statistics and display resampling were tuned so the dense core and the sparse edges read clearly on one map.</p>
+        <dl class="meta"><dt>Software</dt><dd>ArcGIS</dd></dl>
+      </article>
+      <article class="map-card">
+        <div class="plate plate-fireloss" role="img" aria-label="Decorative hatch pattern"><span class="plate-label">GLAD UMD · fire-driven forest loss</span></div>
+        <h3>Forest loss from fire, Zambia</h3>
+        <p>Forest loss attributed to fire across Zambia, mapped from the University of Maryland GLAD lab’s global fire-driven forest loss dataset.</p>
+        <dl class="meta"><dt>Software</dt><dd>QGIS</dd></dl>
+      </article>
+      <article class="map-card">
+        <div class="plate plate-fire" role="img" aria-label="Decorative ring pattern"><span class="plate-label">MODIS · FAO EarthMap</span></div>
+        <h3>Zambia fire infographic</h3>
+        <p>A one-page summary of fire activity across Zambia, built from MODIS observations in FAO’s EarthMap platform.</p>
+        <dl class="meta"><dt>Platform</dt><dd>FAO EarthMap</dd></dl>
+      </article>
+    </div>
+  </section>
+
+  <section class="section wrap" id="research">
+    <div class="sec-head">
+      <p class="eyebrow">Research</p>
+      <h2>Fire, canopy and rainfall in Zambia’s landscapes</h2>
+    </div>
+
+    <div class="research">
+      <article class="study">
+        <div class="study-side">
+          <span class="status">MSc · in progress</span>
+          <span class="site">Nsumbu National Park and Tondwa GMA</span>
+        </div>
+        <h3>Seasonal fire regimes and 3D Miombo canopy structure</h3>
+        <p>Combines NASA GEDI spaceborne LiDAR with Sentinel-2 burn severity, Sentinel-1 radar and VIIRS fire history to test how early and late dry-season fires change canopy height, plant area and above-ground biomass in Miombo woodland.</p>
+        <p class="muted">A ten-year fire regime baseline (2016–2026) is built in Google Earth Engine, and Random Forest models extend GEDI footprints into wall-to-wall canopy maps. The workflow runs end to end in R through rgee, terra, sf and ranger.</p>
+        <ul class="chips" aria-label="Data used">
+          <li>GEDI L2A/L2B · RH50, RH95, PAI</li>
+          <li>Sentinel-2 dNBR</li>
+          <li>Sentinel-1 SAR</li>
+          <li>VIIRS active fire</li>
+        </ul>
+      </article>
+
+      <article class="study">
+        <div class="study-side">
+          <span class="status">BSc thesis · 2022</span>
+          <span class="site">Kasama District</span>
+        </div>
+        <h3>Rainfall variability, vegetation cover and crop yield</h3>
+        <p>Linked rainfall variability to vegetation cover and crop yield across 2000, 2009 and 2020, using Landsat NDVI, IDW-interpolated rainfall and regression analysis.</p>
+        <p class="muted">Now being developed into a multi-district follow-up with Sentinel-2, CHIRPS, MODIS, Google Earth Engine and Random Forest, designed to address the non-stationarity the pilot revealed.</p>
+        <ul class="chips" aria-label="Data used">
+          <li>Landsat NDVI</li>
+          <li>IDW rainfall surfaces</li>
+          <li>Regression</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section wrap" id="upcoming">
+    <div class="sec-head">
+      <p class="eyebrow">Upcoming projects</p>
+      <h2>Protected areas, fire and biodiversity in Zambia</h2>
+    </div>
+    <div class="upcoming">
+      <article class="proj">
+        <div class="proj-top"><span class="status status-up">Upcoming</span><ul class="chips" aria-label="Software"><li>ArcGIS Pro</li><li>QGIS</li><li>GEE</li></ul></div>
+        <h3>Are Zambia’s protected areas holding their forest?</h3>
+        <p class="q">Are national parks, GMAs and forest reserves losing tree cover more slowly than the land around them?</p>
+        <dl class="meta">
+          <dt>Data</dt><dd>Dynamic World tree class 2017–2026 · Hansen Global Forest Change · park, GMA and forest reserve boundaries</dd>
+          <dt>Output</dt><dd>Map series and a dashboard ranking areas by inside-versus-outside loss</dd>
+        </dl>
+        <p class="col-title">Methodology</p>
+        <ol class="steps">
+          <li><span><span class="tool">GEE</span>Build yearly dry-season tree cover and loss years, and total the loss and gain for every protected area.</span></li>
+          <li><span><span class="tool">QGIS</span>Clean the boundaries and draw 10 km buffers outside each area, leaving out neighbouring protected land.</span></li>
+          <li><span><span class="tool">GEE</span>Compare annual loss inside each area with its buffer, and check a sample of change pixels against high-resolution imagery.</span></li>
+          <li><span><span class="tool">ArcGIS Pro</span>Produce a map series and a dashboard ranking areas by inside-versus-outside loss.</span></li>
+        </ol>
+      </article>
+
+      <article class="proj">
+        <div class="proj-top"><span class="status status-up">Upcoming</span><ul class="chips" aria-label="Software"><li>ArcGIS Pro</li><li>QGIS</li><li>GEE</li></ul></div>
+        <h3>Fire atlas of Zambia’s national parks</h3>
+        <p class="q">How much of each park burns each year, and how much burns late in the dry season, when fires are hottest?</p>
+        <dl class="meta">
+          <dt>Data</dt><dd>MODIS and VIIRS burned area · VIIRS active fire · Sentinel-2 dNBR</dd>
+          <dt>Output</dt><dd>Park statistics, fire-frequency maps and an ArcGIS StoryMap</dd>
+        </dl>
+        <p class="col-title">Methodology</p>
+        <ol class="steps">
+          <li><span><span class="tool">GEE</span>Extract burn dates for 2016–2026 and split them into early (May–July) and late (August–November) dry season.</span></li>
+          <li><span><span class="tool">GEE</span>Calculate burned area, fire frequency and late-season share for each park.</span></li>
+          <li><span><span class="tool">GEE</span>Map Sentinel-2 burn severity for focus parks, with thresholds checked against MODIS and water masked out.</span></li>
+          <li><span><span class="tool">QGIS</span><span class="tool">ArcGIS Pro</span>Build park statistics, fire-frequency maps and a StoryMap.</span></li>
+        </ol>
+      </article>
+
+      <article class="proj">
+        <div class="proj-top"><span class="status status-up">Upcoming</span><ul class="chips" aria-label="Software"><li>ArcGIS Pro</li><li>QGIS</li><li>GEE</li></ul></div>
+        <h3>Biodiversity hexagons and survey gaps</h3>
+        <p class="q">Where are species records concentrated, where are the survey gaps, and which hotspots lie outside protected areas?</p>
+        <dl class="meta">
+          <dt>Data</dt><dd>Zambia biodiversity point data (RCMRD training) · GBIF records · protected area boundaries · RCoE geoportal layers</dd>
+          <dt>Output</dt><dd>Hexagon maps and a dashboard of hotspots and survey gaps</dd>
+        </dl>
+        <p class="col-title">Methodology</p>
+        <ol class="steps">
+          <li><span><span class="tool">QGIS</span>Remove duplicates, imprecise coordinates and points outside Zambia.</span></li>
+          <li><span><span class="tool">ArcGIS Pro</span>Build 100 km² hexagons and count records and species in each.</span></li>
+          <li><span><span class="tool">ArcGIS Pro</span>Adjust species counts for survey effort and flag hexagons with too few records as data gaps.</span></li>
+          <li><span><span class="tool">ArcGIS Pro</span>Overlay protected areas to find rich hexagons outside them, and publish a dashboard.</span></li>
+        </ol>
+      </article>
+
+      <article class="proj">
+        <div class="proj-top"><span class="status status-up">Upcoming</span><ul class="chips" aria-label="Software"><li>ArcGIS Pro</li><li>QGIS</li><li>GEE</li></ul></div>
+        <h3>Corridors between Kasanka, Lavushi Manda and Bangweulu</h3>
+        <p class="q">Can wildlife still move between the two parks and the Bangweulu Wetlands, and how has land-cover change since 2017 shifted the best routes?</p>
+        <dl class="meta">
+          <dt>Data</dt><dd>Dynamic World 2017 and 2026 · OpenStreetMap roads and settlements · 30 m DEM · protected area boundaries</dd>
+          <dt>Output</dt><dd>Corridor maps for 2017 and 2026 with a change summary</dd>
+        </dl>
+        <p class="col-title">Methodology</p>
+        <ol class="steps">
+          <li><span><span class="tool">GEE</span>Export land cover for both years across the landscape.</span></li>
+          <li><span><span class="tool">QGIS</span>Build a resistance surface from land cover, roads, settlements and slope.</span></li>
+          <li><span><span class="tool">ArcGIS Pro</span>Map least-cost corridors between the three areas for each year with Linkage Mapper.</span></li>
+          <li><span><span class="tool">ArcGIS Pro</span>Compare corridor length, cost and bottlenecks, and test how sensitive the results are to the resistance values.</span></li>
+        </ol>
+      </article>
+    </div>
+  </section>
+
+  <section class="section wrap" id="sites">
+    <div class="sec-head">
+      <p class="eyebrow">Study and field sites</p>
+      <h2>Where the work happens</h2>
+    </div>
+    <div class="sites">
+      <figure class="locator">
+        <svg viewBox="0 0 400 492" role="img" aria-label="Graticule plot of study and field sites in Zambia, from Nsumbu in the north to Munyumbwe in the south">
+          <g class="g-minor">
+            <line x1="90" y1="14" x2="90" y2="464"/><line x1="190" y1="14" x2="190" y2="464"/><line x1="290" y1="14" x2="290" y2="464"/>
+            <line x1="40" y1="64" x2="390" y2="64"/><line x1="40" y1="164" x2="390" y2="164"/><line x1="40" y1="264" x2="390" y2="264"/><line x1="40" y1="364" x2="390" y2="364"/>
+          </g>
+          <g class="g-major">
+            <line x1="140" y1="14" x2="140" y2="464"/><line x1="240" y1="14" x2="240" y2="464"/><line x1="340" y1="14" x2="340" y2="464"/>
+            <line x1="40" y1="114" x2="390" y2="114"/><line x1="40" y1="214" x2="390" y2="214"/><line x1="40" y1="314" x2="390" y2="314"/><line x1="40" y1="414" x2="390" y2="414"/>
+          </g>
+          <rect class="g-frame" x="40" y="14" width="350" height="450"/>
+          <g class="g-lab" text-anchor="end">
+            <text x="34" y="18">8°S</text><text x="34" y="118">10°S</text><text x="34" y="218">12°S</text><text x="34" y="318">14°S</text><text x="34" y="418">16°S</text>
+          </g>
+          <g class="g-lab" text-anchor="middle">
+            <text x="40" y="482">26°E</text><text x="140" y="482">28°E</text><text x="240" y="482">30°E</text><text x="340" y="482">32°E</text>
+          </g>
+          <circle class="pt-r" cx="260" cy="44" r="6"/>
+          <text class="pt-lab" x="249" y="48" text-anchor="end">Nsumbu NP &amp; Tondwa GMA</text>
+          <circle class="pt-r" cx="300" cy="124" r="6"/>
+          <text class="pt-lab" x="311" y="128">Kasama</text>
+          <circle class="pt-f" cx="282.5" cy="231.5" r="5.5"/>
+          <text class="pt-lab" x="293" y="235">Lavushimanda</text>
+          <circle class="pt-f" cx="257.5" cy="251.5" r="5.5"/>
+          <text class="pt-lab" x="247" y="255.5" text-anchor="end">Chitambo</text>
+          <circle class="pt-r" cx="154" cy="385" r="6"/>
+          <text class="pt-lab" x="165" y="389">Lusaka</text>
+          <circle class="pt-f" cx="135" cy="441.5" r="5.5"/>
+          <text class="pt-lab" x="146" y="445.5">Munyumbwe</text>
+        </svg>
+        <div class="legend">
+          <span><i class="key key-r"></i>Research and mapping</span>
+          <span><i class="key key-f"></i>Field and community work</span>
+        </div>
+        <figcaption>Approximate positions on a 1° graticule, WGS 84</figcaption>
+      </figure>
+
+      <ul class="site-list">
+        <li><span class="place">Nsumbu National Park &amp; Tondwa GMA</span><span class="coord">≈ 8.6°S 30.4°E</span><span class="what">MSc fire and canopy research; least-cost path analysis</span></li>
+        <li><span class="place">Kasama District</span><span class="coord">≈ 10.2°S 31.2°E</span><span class="what">BSc study of rainfall, vegetation cover and crop yield</span></li>
+        <li><span class="place">Lavushimanda &amp; Chitambo</span><span class="coord">≈ 12.5°S 30.6°E</span><span class="what">26 geo-referenced Miombo inventory plots</span></li>
+        <li><span class="place">Lusaka District</span><span class="coord">≈ 15.4°S 28.3°E</span><span class="what">Population density mapping</span></li>
+        <li><span class="place">Munyumbwe, Gwembe District</span><span class="coord">≈ 16.6°S 27.9°E</span><span class="what">Farmer Field School programme; Gwembe land cover and terrain mapping</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section wrap" id="experience">
+    <div class="sec-head">
+      <p class="eyebrow">Experience</p>
+      <h2>Field, community and consultancy work</h2>
+    </div>
+    <ol class="timeline">
+      <li>
+        <span class="when">Apr 2026 – present</span>
+        <h3>District Facilitator</h3>
+        <span class="org">Nutri-Aid Trust · NAT-ZGF CSSF Project · Gwembe District</span>
+        <p>Supports Farmer Field Schools and a Centre of Excellence that run irrigated, climate-smart gardens. Designs and delivers trainings on annual work planning, resource mobilisation and entrepreneurship, and helps groups strengthen their governance and reporting.</p>
+      </li>
+      <li>
+        <span class="when">May 2025 – present</span>
+        <h3>Training Manager</h3>
+        <span class="org">Tuskline Wildlife Research and Training Institute · hybrid</span>
+        <p>Leads biodiversity monitoring with camera traps, vegetation surveys and standardised ecological sampling. Trains conservation practitioners and students in SMART administration, field data collection and GIS, and produces habitat and wildlife distribution maps.</p>
+      </li>
+      <li>
+        <span class="when">2023 – present</span>
+        <h3>Independent GIS &amp; Remote Sensing Consultant</h3>
+        <span class="org">Academic research clients</span>
+        <p>Provides spatial data analysis, data management and study-area maps for academic research projects.</p>
+      </li>
+      <li>
+        <span class="when">Nov 2022 – present</span>
+        <h3>Administrative Director</h3>
+        <span class="org">Know Your Wildlife and the Environment Zambia (KWEZI) · hybrid</span>
+        <p>Provides administrative and strategic leadership for conservation, environmental education and community awareness work, and coordinates partners across community groups, government agencies and schools.</p>
+      </li>
+      <li>
+        <span class="when">Feb – Apr 2026</span>
+        <h3>Tree Inventory Intern</h3>
+        <span class="org">Community Climate Solutions Zambia (CCSZ) · Kasanka landscape</span>
+        <p>Surveyed 26 geo-referenced Miombo woodland plots across Lavushimanda and Chitambo, recording DBH, tree health and species with GPS, ODK and a tree inventory app.</p>
+      </li>
+      <li>
+        <span class="when">Apr 2024 – Feb 2025</span>
+        <h3>PlantVillage Field Technician and Extension Officer</h3>
+        <span class="org">Zambia Agriculture Research Institute (ZARI) · Kapiri Mposhi</span>
+        <p>Collected and analysed soil, rainfall and groundwater data with ODK, GIS and Ag-Observatory, produced thematic maps for district planning, and diagnosed crop pests and diseases with the PlantVillage AI app.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section wrap" id="education">
+    <div class="sec-head">
+      <p class="eyebrow">Education and training</p>
+      <h2>Degrees, certificates and toolkit</h2>
+    </div>
+    <p class="col-title">Degrees</p>
+    <ul class="creds degrees">
+      <li><span class="c-name">MSc Tropical Ecology and Biodiversity Management</span><span class="c-date">2025 – present</span><span class="c-org">Copperbelt University</span></li>
+      <li><span class="c-name">BSc Agroforestry, Upper Credit</span><span class="c-date">Aug 2023</span><span class="c-org">Copperbelt University, Kapasa Makasa Campus</span></li>
+    </ul>
+
+    <div class="cert-head">
+      <p class="col-title">Professional certificates</p>
+      <p>Sixteen courses in GIS, conservation data, climate and project management. Tap a certificate to see the full scan.</p>
+    </div>
+    <ul class="cert-grid">
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Transforming Data into Decisions (Module 2) · RCMRD / RCoE-ESA · Aug 2026"><img src="img/certs/cert-rcmrd-m2.webp" alt="RCMRD certificate of completion, Transforming Data into Decisions" loading="lazy"></button><span class="cert-name">Transforming Data into Decisions (Module 2)</span><span class="cert-meta">RCMRD / RCoE-ESA · Aug 2026</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Transforming Maps into Stories (Module 1) · RCMRD / RCoE-ESA · Aug 2026"><img src="img/certs/cert-rcmrd-m1.webp" alt="RCMRD certificate of completion, Transforming Maps into Stories" loading="lazy"></button><span class="cert-name">Transforming Maps into Stories (Module 1)</span><span class="cert-meta">RCMRD / RCoE-ESA · Aug 2026</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Managing Projects with Microsoft 365 · MTN Skills Academy · Aug 2026"><img src="img/certs/cert-mtn-m365.webp" alt="MTN Skills Academy certificate, Managing Projects with Microsoft 365" loading="lazy"></button><span class="cert-name">Managing Projects with Microsoft 365</span><span class="cert-meta">MTN Skills Academy · Aug 2026</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Introduction to Forest Management Planning · FAO eLearning Academy · Jun 2026"><img src="img/certs/cert-fao-fmp.webp" alt="FAO eLearning Academy certificate, Introduction to Forest Management Planning" loading="lazy"></button><span class="cert-name">Introduction to Forest Management Planning</span><span class="cert-meta">FAO eLearning Academy · Jun 2026</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Excel Fundamentals for Data Analysis · Macquarie University via Coursera · Jun 2026"><img src="img/certs/cert-coursera-excel.webp" alt="Coursera course certificate, Excel Fundamentals for Data Analysis" loading="lazy"></button><span class="cert-name">Excel Fundamentals for Data Analysis</span><span class="cert-meta">Macquarie University via Coursera · Jun 2026</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="GIS and its Application in Agriculture · DOST-PCAARRD · Sep 2025"><img src="img/certs/cert-pcaarrd-gis-agri.webp" alt="DOST-PCAARRD certificate, GIS and its Application in Agriculture" loading="lazy"></button><span class="cert-name">GIS and its Application in Agriculture</span><span class="cert-meta">DOST-PCAARRD · Sep 2025</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="GIS Data for Agriculture and Forestry in the Open Data Era · DOST-PCAARRD · Sep 2025"><img src="img/certs/cert-pcaarrd-gis-data.webp" alt="DOST-PCAARRD certificate, GIS Data for Agriculture and Forestry in the Open Data Era" loading="lazy"></button><span class="cert-name">GIS Data for Agriculture and Forestry in the Open Data Era</span><span class="cert-meta">DOST-PCAARRD · Sep 2025</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="SMART for Data Analysts and Database Administrators · UCI and SMART Alliance · Aug 2025"><img src="img/certs/cert-smart-uci.webp" alt="UCI certificate of approval, SMART for Data Analysts and Database Administrators" loading="lazy"></button><span class="cert-name">SMART for Data Analysts and Database Administrators</span><span class="cert-meta">UCI and SMART Alliance · 40 hours · Aug 2025</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Monitoring and Evaluation · Tuskline Wildlife Research and Training Institute · Jun 2024"><img src="img/certs/cert-tuskline-me.webp" alt="Tuskline certificate of completion, Monitoring and Evaluation" loading="lazy"></button><span class="cert-name">Monitoring and Evaluation</span><span class="cert-meta">Tuskline Wildlife Research and Training Institute · 24 weeks · Jun 2024</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Business and Entrepreneurship Development · YALI Regional Leadership Center Southern Africa · 2024"><img src="img/certs/cert-yali-rlc.webp" alt="YALI Regional Leadership Center certificate, Business and Entrepreneurship Development" loading="lazy"></button><span class="cert-name">Business and Entrepreneurship Development</span><span class="cert-meta">YALI Regional Leadership Center Southern Africa · 2024</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Gender and Environment (Module 1) · UNITAR and UN CC:Learn · Nov 2023"><img src="img/certs/cert-unitar-gender-env.webp" alt="UN CC:Learn certificate of participation, Gender and Environment" loading="lazy"></button><span class="cert-name">Gender and Environment (Module 1)</span><span class="cert-meta">UNITAR and UN CC:Learn · Nov 2023</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Gender and Climate Change (Module 3) · UNITAR and UN CC:Learn · Nov 2023"><img src="img/certs/cert-unitar-gender-climate.webp" alt="UN CC:Learn certificate of participation, Gender and Climate Change" loading="lazy"></button><span class="cert-name">Gender and Climate Change (Module 3)</span><span class="cert-meta">UNITAR and UN CC:Learn · Nov 2023</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Green Bonds · UNDP Climate Promise · Jan 2023"><img src="img/certs/cert-undp-green-bonds.webp" alt="UNDP certificate of completion, Green Bonds" loading="lazy"></button><span class="cert-name">Green Bonds</span><span class="cert-meta">UNDP Climate Promise · Jan 2023</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Gender Equality, Women’s Empowerment and Leadership in the Context of National Biodiversity Planning and Reporting · NBSAP Forum and UNDP · Dec 2022"><img src="img/certs/cert-undp-biodiversity-gender.webp" alt="NBSAP Forum certificate of completion, Gender Equality in National Biodiversity Planning" loading="lazy"></button><span class="cert-name">Gender Equality and Leadership in National Biodiversity Planning</span><span class="cert-meta">NBSAP Forum and UNDP · Dec 2022</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Sustainable Commodity Supply Chains · NBSAP Forum and UNDP · Dec 2022"><img src="img/certs/cert-undp-supply-chains.webp" alt="NBSAP Forum certificate of completion, Sustainable Commodity Supply Chains" loading="lazy"></button><span class="cert-name">Sustainable Commodity Supply Chains</span><span class="cert-meta">NBSAP Forum and UNDP · Dec 2022</span></li>
+      <li class="cert"><button class="cert-thumb" type="button" data-caption="Fundamentals on REDD+ · UNITAR and UN-REDD Programme · Dec 2022"><img src="img/certs/cert-unredd-fundamentals.webp" alt="UNITAR certificate of completion, Fundamentals on REDD+" loading="lazy"></button><span class="cert-name">Fundamentals on REDD+</span><span class="cert-meta">UNITAR and UN-REDD Programme · Dec 2022</span></li>
+    </ul>
+    <dialog class="viewer" id="cert-viewer" aria-label="Certificate">
+      <div class="viewer-inner">
+        <div class="viewer-bar">
+          <span id="viewer-cap"></span>
+          <button class="copy" id="viewer-close" type="button">Close</button>
+        </div>
+        <img id="viewer-img" src="" alt="">
+      </div>
+    </dialog>
+
+    <div class="toolkit">
+      <div>
+        <p class="col-title">Software</p>
+        <ul class="chips"><li>ArcGIS Pro</li><li>QGIS</li><li>Google Earth Engine</li><li>R and RStudio</li><li>SMART</li><li>ODK and KoBo</li><li>ArcGIS StoryMaps</li><li>ArcGIS Dashboards</li><li>Microsoft Office</li></ul>
+      </div>
+      <div>
+        <p class="col-title">Data</p>
+        <ul class="chips"><li>Sentinel-1</li><li>Sentinel-2</li><li>Landsat</li><li>GEDI LiDAR</li><li>VIIRS</li><li>MODIS</li><li>GHS-POP</li><li>GLAD forest loss</li><li>Esri Land Cover</li></ul>
+      </div>
+      <div>
+        <p class="col-title">Methods</p>
+        <ul class="chips"><li>Land cover change</li><li>Least-cost path</li><li>NDVI</li><li>dNBR burn severity</li><li>Random Forest</li><li>IDW interpolation</li><li>Regression</li><li>Raster statistics</li></ul>
+      </div>
+      <div>
+        <p class="col-title">Field</p>
+        <ul class="chips"><li>Camera traps</li><li>Vegetation surveys</li><li>Forest inventory plots</li><li>GPS data collection</li><li>Biodiversity monitoring</li><li>Climate-smart agriculture</li><li>Training and facilitation</li><li>Monitoring and evaluation</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" id="contact">
+    <div class="sec-head">
+      <p class="eyebrow">Contact</p>
+      <h2>Work with me</h2>
+    </div>
+    <div class="contact">
+      <p>Get in touch about GIS and remote sensing consultancy, research collaboration, or conservation and community projects in Zambia.</p>
+      <dl class="contact-list">
+        <div><dt>Email</dt><dd><span class="contact-val" id="email-text">stanleysampa999@gmail.com</span><button class="copy" type="button" data-copy="stanleysampa999@gmail.com" data-target="email-text">Copy</button></dd></div>
+        <div><dt>Phone</dt><dd><span class="contact-val" id="phone-text">+260 975 780 225</span><button class="copy" type="button" data-copy="+260975780225" data-target="phone-text">Copy</button></dd></div>
+        <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/stanley-sampa-129310210" target="_blank" rel="noopener">linkedin.com/in/stanley-sampa-129310210</a></dd></div>
+        <div><dt>Based in</dt><dd><span class="contact-place">Munyumbwe, Gwembe District, Zambia</span></dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Stanley Sampa · Munyumbwe, Zambia</span>
+    <span>Datum WGS 84 · Revised October 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Copy buttons
+  document.querySelectorAll('.copy[data-copy]').forEach(function(btn){
+    var label = btn.textContent;
+    btn.addEventListener('click', function(){
+      var text = btn.getAttribute('data-copy');
+      var reset = function(){ setTimeout(function(){ btn.textContent = label; }, 1800); };
+      var fallback = function(){
+        var el = document.getElementById(btn.getAttribute('data-target'));
+        try {
+          var range = document.createRange(); range.selectNodeContents(el);
+          var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+          btn.textContent = 'Selected';
+        } catch (e) { btn.textContent = 'Select it to copy'; }
+        reset();
+      };
+      try { navigator.clipboard.writeText(text).then(function(){ btn.textContent = 'Copied'; reset(); }, fallback); }
+      catch (e) { fallback(); }
+    });
+  });
+
+  // Certificate viewer
+  var dlg = document.getElementById('cert-viewer');
+  var vImg = document.getElementById('viewer-img');
+  var vCap = document.getElementById('viewer-cap');
+  function closeViewer(){ try { dlg.close(); } catch (e) { dlg.removeAttribute('open'); } }
+  if (dlg && vImg) {
+    document.querySelectorAll('.cert-thumb').forEach(function(b){
+      b.addEventListener('click', function(){
+        var img = b.querySelector('img');
+        vImg.src = img.src; vImg.alt = img.alt;
+        vCap.textContent = b.getAttribute('data-caption') || '';
+        try { dlg.showModal(); } catch (e) { dlg.setAttribute('open', ''); }
+      });
+    });
+    document.getElementById('viewer-close').addEventListener('click', closeViewer);
+    dlg.addEventListener('click', function(e){ if (e.target === dlg) closeViewer(); });
+  }
+
+  // Generated contour lines for the hero sheet (decorative)
+  var cv = document.getElementById('contours');
+  if (!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+
+  function mulberry32(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var rand = mulberry32(1622);
+  var G = 64, grid = new Float32Array(G * G);
+  for (var i = 0; i < G * G; i++) grid[i] = rand();
+  function g(x, y){ return grid[((y % G + G) % G) * G + ((x % G + G) % G)]; }
+  function smooth(t){ return t * t * (3 - 2 * t); }
+  function vnoise(x, y){
+    var xi = Math.floor(x), yi = Math.floor(y), u = smooth(x - xi), v = smooth(y - yi);
+    var a = g(xi, yi), b = g(xi + 1, yi), c = g(xi, yi + 1), d = g(xi + 1, yi + 1);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  }
+  function fbm(x, y){ var f = 0, amp = 0.5, fr = 1; for (var o = 0; o < 4; o++){ f += amp * vnoise(x * fr, y * fr); amp *= 0.5; fr *= 2; } return f; }
+
+  // Marching-squares edge pairs; edges: 0 top, 1 right, 2 bottom, 3 left
+  var TABLE = [[],[[3,2]],[[2,1]],[[3,1]],[[0,1]],[[0,1],[3,2]],[[0,2]],[[0,3]],[[0,3]],[[0,2]],[[0,3],[2,1]],[[0,1]],[[3,1]],[[2,1]],[[3,2]],[]];
+
+  function draw(){
+    var r = cv.getBoundingClientRect();
+    var W = Math.max(1, Math.round(r.width)), H = Math.max(1, Math.round(r.height));
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    var cs = getComputedStyle(document.documentElement);
+    var lineC = cs.getPropertyValue('--contour').trim() || 'rgba(45,106,69,.2)';
+    var idxC = cs.getPropertyValue('--contour-index').trim() || 'rgba(45,106,69,.42)';
+    var step = 7, nx = Math.ceil(W / step) + 1, ny = Math.ceil(H / step) + 1, sc = 1 / 180;
+    var f = new Float32Array(nx * ny);
+    for (var j = 0; j < ny; j++) for (var i2 = 0; i2 < nx; i2++) f[j * nx + i2] = fbm(i2 * step * sc + 3.1, j * step * sc + 7.7);
+    var k = 0;
+    for (var L = 0.18; L < 0.80; L += 0.021, k++){
+      var index = (k % 5 === 0);
+      ctx.beginPath();
+      for (var y = 0; y < ny - 1; y++){
+        for (var x = 0; x < nx - 1; x++){
+          var a = f[y * nx + x], b = f[y * nx + x + 1], c = f[(y + 1) * nx + x + 1], d = f[(y + 1) * nx + x];
+          var id = (a > L ? 8 : 0) | (b > L ? 4 : 0) | (c > L ? 2 : 0) | (d > L ? 1 : 0);
+          if (id === 0 || id === 15) continue;
+          var x0 = x * step, y0 = y * step, x1 = x0 + step, y1 = y0 + step;
+          var pts = [
+            [x0 + (L - a) / (b - a) * step, y0],
+            [x1, y0 + (L - b) / (c - b) * step],
+            [x0 + (L - d) / (c - d) * step, y1],
+            [x0, y0 + (L - a) / (d - a) * step]
+          ];
+          var segs = TABLE[id];
+          for (var s = 0; s < segs.length; s++){
+            var p = pts[segs[s][0]], q = pts[segs[s][1]];
+            ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]);
+          }
+        }
+      }
+      ctx.strokeStyle = index ? idxC : lineC;
+      ctx.lineWidth = index ? 1.15 : 0.6;
+      ctx.stroke();
+    }
+  }
+
+  var pending = false;
+  function schedule(){ if (pending) return; pending = true; requestAnimationFrame(function(){ pending = false; try { draw(); } catch (e) {} }); }
+  schedule();
+  window.addEventListener('resize', schedule);
+  try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', schedule); } catch (e) {}
+  try { new MutationObserver(schedule).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch (e) {}
+})();
+</script>
+</body>
+</html>
