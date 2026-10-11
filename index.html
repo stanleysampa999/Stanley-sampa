@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Stanley Sampa Portfolio</title>
-<meta name="description" content="Stanley Sampa: field ecologist and GIS analyst in Zambia. Maps, remote sensing analyses, research and certificates.">
-<meta property="og:title" content="Stanley Sampa · GIS and field ecology">
-<meta property="og:description" content="Maps, remote sensing analyses and research on fire, land cover and protected areas in Zambia.">
+<meta name="description" content="Stanley Sampa: agroforester, ecologist and GIS and remote sensing analyst in Zambia. Agriculture, forestry, maps, research and certificates.">
+<meta property="og:title" content="Stanley Sampa · Agroforestry, ecology and GIS">
+<meta property="og:description" content="Agriculture, forestry, ecology and GIS work in Zambia: maps, remote sensing analyses, research and field experience.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stanleysampa999.github.io/Stanley-sampa/">
-<meta property="og:image" content="https://stanleysampa999.github.io/Stanley-sampa/img/social-card.jpg">
+<meta property="og:image" content="https://stanleysampa999.github.io/Stanley-sampa/img/social-card.jpg?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Stanley Sampa, field ecologist and GIS analyst, Gwembe District, Zambia">
+<meta property="og:image:alt" content="Stanley Sampa, agroforester, ecologist and GIS analyst, Gwembe District, Zambia">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%232D6A45'/%3E%3Ctext x='16' y='21.5' font-family='Arial,sans-serif' font-size='14' font-weight='700' fill='%23F0F3EE' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -85,7 +85,7 @@ p{margin:0}
 }
 .sheet-inner{position:relative;display:grid;gap:22px;padding:clamp(22px,5vw,60px) clamp(20px,5vw,60px) clamp(28px,5vw,56px)}
 .hero h1{font-stretch:125%;font-weight:850;text-transform:uppercase;font-size:clamp(2.5rem,9.5vw,6.4rem);line-height:.9;letter-spacing:.005em}
-.lede{font-size:clamp(1.15rem,2.2vw,1.45rem);line-height:1.45;max-width:32ch}
+.lede{font-size:clamp(1.12rem,2vw,1.35rem);line-height:1.5;max-width:46ch}
 .cta{display:flex;flex-wrap:wrap;gap:12px}
 .btn{font-family:var(--display);font-weight:600;font-size:.92rem;text-decoration:none;padding:10px 16px;border:1.5px solid var(--ink);border-radius:2px;background:var(--paper)}
 .btn-primary{background:var(--leaf);border-color:var(--leaf);color:var(--on-leaf)}
@@ -298,6 +298,18 @@ dialog.viewer::backdrop{background:rgba(8,14,11,.74)}
 .copy{font-family:var(--display);font-weight:600;font-size:.88rem;padding:9px 14px;border:1.5px solid var(--ink);border-radius:2px;background:var(--paper);color:var(--ink);cursor:pointer}
 .copy:hover{border-color:var(--leaf);color:var(--leaf)}
 
+/* Agriculture and forestry */
+.domains{display:grid;grid-template-columns:1fr;gap:28px 32px}
+@media (min-width:700px){.domains{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.domains{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.domain{display:grid;gap:10px;align-content:start;border-top:1px solid var(--ink);padding-top:14px;min-width:0}
+.domain h3{font-size:1.12rem}
+.domain p{font-size:.98rem}
+.domain .where{font-family:var(--mono);font-size:.7rem;line-height:1.5;color:var(--muted)}
+.domain .where b{font-weight:500;color:var(--leaf);letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
+.domain-intro{border-top:0;padding-top:0;align-content:center}
+.domain-intro p{font-size:clamp(1.15rem,2.2vw,1.4rem);line-height:1.45}
+
 /* Zoomable map images */
 button.plate{display:block;width:100%;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:zoom-in}
 button.plate:hover,.shot:hover{border-color:var(--leaf)}
@@ -349,9 +361,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     <div class="frame">
       <canvas id="contours" aria-hidden="true"></canvas>
       <div class="sheet-inner">
-        <p class="eyebrow">GIS · Remote sensing · Field ecology</p>
+        <p class="eyebrow">Agroforestry · Ecology &amp; biodiversity · GIS &amp; remote sensing · Community development</p>
         <h1>Stanley<br>Sampa</h1>
-        <p class="lede">I use satellite data and fieldwork to understand how fire, rainfall and land use are changing Zambia’s Miombo woodlands and farmland.</p>
+        <p class="lede">Trained as an agroforester, now focused on biodiversity and ecology. I use GIS, remote sensing and fieldwork to understand how fire, rainfall and land use are changing Zambia’s Miombo woodlands and farmland, and I work with the communities who depend on them.</p>
         <div class="cta">
           <a class="btn btn-primary" href="#work">See the work</a>
           <a class="btn" href="#contact">Get in touch</a>
@@ -370,22 +382,59 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   <section class="section wrap" id="about">
     <div class="sec-head">
       <p class="eyebrow">About</p>
-      <h2>Field ecologist and GIS analyst</h2>
+      <h2>Agroforester, ecologist and GIS analyst</h2>
     </div>
     <div class="about">
       <figure class="portrait"><img src="img/stanley-sampa.webp" width="800" height="1000" alt="Stanley Sampa standing in dry woodland in the field"></figure>
       <div class="about-text">
       <div class="bio">
         <p class="col-title">Bio</p>
-        <p>Stanley Sampa is a Zambian field ecologist and GIS analyst based in Munyumbwe, Gwembe District. He combines satellite data with fieldwork to track how fire, rainfall and land use are changing Miombo woodlands and farmland, and he works alongside the communities who depend on them.</p>
-        <p>He is District Facilitator on the NAT-ZGF CSSF Project, supporting Farmer Field Schools with climate-smart agriculture and group governance. He is also Training Manager at Tuskline Wildlife Research and Training Institute, where he trains field teams in SMART, camera-trap monitoring and spatial data workflows, and Administrative Director of Know Your Wildlife and the Environment Zambia (KWEZI). Earlier, he worked as a PlantVillage field technician with ZARI in Kapiri Mposhi and surveyed Miombo inventory plots in the Kasanka landscape.</p>
-        <p>He holds a BSc in Agroforestry from Copperbelt University and is completing an MSc in Tropical Ecology and Biodiversity Management there. His research looks at how seasonal fire regimes shape canopy structure in Nsumbu National Park.</p>
+        <p>Stanley Sampa is a Zambian agroforester, ecologist, and GIS and remote sensing analyst based in Munyumbwe, Gwembe District. He trained as an agroforester at Copperbelt University, where his BSc covered both agriculture and forestry. Working across farms and woodlands drew him to biodiversity and ecology, which he is now studying for an MSc in Tropical Ecology and Biodiversity Management. GIS and remote sensing tie the two together.</p>
+        <p>He is District Facilitator on the NAT-ZGF CSSF Project, supporting Farmer Field Schools with climate-smart agriculture and group governance. He is also Training Manager at Tuskline Wildlife Research and Training Institute, where he has trained more than 100 students and 17 conservation professionals in camera traps, GIS and remote sensing, and Administrative Director of Know Your Wildlife and the Environment Zambia (KWEZI). Earlier, he supervised coffee nurseries and crop monitoring at Kateshi Estate in Kasama, worked as a PlantVillage field technician with ZARI in Kapiri Mposhi, and surveyed Miombo inventory plots in the Kasanka landscape.</p>
+        <p>His MSc research looks at how seasonal fire regimes shape canopy structure in Nsumbu National Park.</p>
       </div>
       <aside class="summary" aria-label="Professional summary">
         <p class="col-title">Professional summary</p>
-        <p>Field ecologist and GIS analyst working across wildlife, forestry and agricultural systems in Zambia. I run spatial analyses in ArcGIS Pro, QGIS, Google Earth Engine and R, including land cover change detection, least-cost path modelling and vegetation index analysis. I collect the field data behind them with camera traps, vegetation plots, GPS, ODK/KoBo and SMART. I also train field teams and farmer groups, and manage community programmes from planning through to reporting.</p>
+        <p>Agroforester and ecologist working across agriculture, forestry and wildlife systems in Zambia. In agriculture, I diagnose crop pests and diseases, run crop trials and soil tests, and train smallholder farmers in climate-smart agriculture. In forestry and ecology, I run tree inventories, vegetation surveys and camera-trap monitoring. I connect both with GIS and remote sensing in ArcGIS Pro, QGIS, Google Earth Engine and R, and I manage community programmes from planning through to reporting.</p>
       </aside>
       </div>
+    </div>
+  </section>
+
+  <section class="section wrap" id="agroforestry">
+    <div class="sec-head">
+      <p class="eyebrow">Agroforestry</p>
+      <h2>Agriculture and forestry</h2>
+    </div>
+    <div class="domains">
+      <div class="domain domain-intro">
+        <p>Trained as an agroforester, I work on farms, in nurseries and in Miombo woodland, from diagnosing a crop disease to measuring a forest plot.</p>
+      </div>
+      <article class="domain">
+        <h3>Crop health and protection</h3>
+        <p>I diagnose crop pests and diseases in the field, including with the PlantVillage AI app, and give integrated pest management (IPM) advice. I monitor crops through their growth stages and record pest and disease incidents.</p>
+        <p class="where"><b>Where</b>ZARI PlantVillage, Kapiri Mposhi · NCCL Kateshi Estate · ZARI Choma</p>
+      </article>
+      <article class="domain">
+        <h3>Crop management</h3>
+        <p>I run variety trials and field agronomic assessments, supervise nurseries and greenhouses for seedling production, and record harvest and production data. With farmer groups, I plan garden work, irrigation, soil fertility and conservation farming.</p>
+        <p class="where"><b>Where</b>ZARI Choma · NCCL Kateshi Estate · NAT-ZGF Farmer Field Schools</p>
+      </article>
+      <article class="domain">
+        <h3>Soil and land</h3>
+        <p>I take soil samples and run tests, collect rainfall and groundwater data, and map soils, land capability and land cover in GIS. I have also supported pasture and fodder research.</p>
+        <p class="where"><b>Where</b>ZARI Choma · ZARI PlantVillage · Soil map of Zambia</p>
+      </article>
+      <article class="domain">
+        <h3>Forestry and agroforestry</h3>
+        <p>I lay out and measure forest inventory plots, recording DBH, tree health and species in Miombo woodland, and run vegetation surveys. I work with fertiliser trees such as Gliricidia and msangu (Faidherbia albida) in agroforestry systems, and have trained in forest management planning and REDD+.</p>
+        <p class="where"><b>Where</b>CCSZ, Kasanka landscape · Tuskline · FAO and UN-REDD courses</p>
+      </article>
+      <article class="domain">
+        <h3>Extension and farmer training</h3>
+        <p>I train smallholder farmers in climate-smart agriculture, coordinate field work with district and camp extension officers, and support Farmer Field Schools with work plans and resource mobilisation.</p>
+        <p class="where"><b>Where</b>ZARI · NAT-ZGF Farmer Field Schools</p>
+      </article>
     </div>
   </section>
 
@@ -819,7 +868,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
         <span class="when">May 2025 – present</span>
         <h3>Training Manager</h3>
         <span class="org">Tuskline Wildlife Research and Training Institute · hybrid</span>
-        <p>Leads biodiversity monitoring with camera traps, vegetation surveys and standardised ecological sampling. Trains conservation practitioners and students in SMART administration, field data collection and GIS, and produces habitat and wildlife distribution maps.</p>
+        <p>Has trained more than 100 students and 17 conservation professionals in camera traps, GIS and remote sensing. Leads biodiversity monitoring with camera traps, vegetation surveys and standardised ecological sampling, trains practitioners in SMART administration and field data collection, and produces habitat and wildlife distribution maps.</p>
       </li>
       <li>
         <span class="when">2023 – present</span>
@@ -848,6 +897,18 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
         <h3>PlantVillage Field Technician and Extension Officer</h3>
         <span class="org">Zambia Agriculture Research Institute (ZARI) · Kapiri Mposhi</span>
         <p>Collected and analysed soil, rainfall and groundwater data with ODK, GIS and Ag-Observatory, produced thematic maps for district planning, and diagnosed crop pests and diseases with the PlantVillage AI app.</p>
+      </li>
+      <li>
+        <span class="when">Apr – Nov 2023</span>
+        <h3>Nursery and Field Assistant Supervisor</h3>
+        <span class="org">NCCL · Kateshi Coffee Estate, Kasama</span>
+        <p>Monitored coffee through its growth stages, berry development and plant health using GIS and Ag-Observatory. Recorded pest and disease incidents, supervised nursery and greenhouse seedling production, and verified harvest weights and production data.</p>
+      </li>
+      <li>
+        <span class="when">Oct – Dec 2021</span>
+        <h3>Agronomy Industrial Attachment</h3>
+        <span class="org">Zambia Agriculture Research Institute (ZARI) · Choma</span>
+        <p>Ran crop variety trials, soil testing and field agronomic assessments. Supported pest and disease monitoring, pasture, fodder and livestock feed research, and climate and agricultural data collection.</p>
       </li>
     </ol>
   </section>
