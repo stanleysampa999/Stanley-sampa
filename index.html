@@ -8,6 +8,12 @@
 <meta property="og:title" content="Stanley Sampa · GIS and field ecology">
 <meta property="og:description" content="Maps, remote sensing analyses and research on fire, land cover and protected areas in Zambia.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://stanleysampa999.github.io/Stanley-sampa/">
+<meta property="og:image" content="https://stanleysampa999.github.io/Stanley-sampa/img/social-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stanley Sampa, field ecologist and GIS analyst, Gwembe District, Zambia">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%232D6A45'/%3E%3Ctext x='16' y='21.5' font-family='Arial,sans-serif' font-size='14' font-weight='700' fill='%23F0F3EE' text-anchor='middle'%3ESS%3C/text%3E%3C/svg%3E">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
 
@@ -228,6 +234,11 @@ table.area td:first-child{font-family:var(--display);font-weight:600}
 .when{font-family:var(--mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
 .org{font-family:var(--display);font-size:.92rem;font-weight:500;color:var(--muted)}
 .timeline p{max-width:66ch}
+.exp-photo{margin:6px 0 0;display:grid;gap:6px;max-width:240px}
+.exp-photo .shot{aspect-ratio:3/4}
+.exp-photo .shot img{object-fit:cover}
+.exp-photo figcaption{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+@media (min-width:760px){.timeline .exp-photo{grid-column:2}}
 
 /* Education, training, toolkit */
 .two-col{display:grid;grid-template-columns:1fr;gap:36px}
@@ -257,7 +268,11 @@ table.area td:first-child{font-family:var(--display);font-weight:600}
 
 /* About */
 .about{display:grid;grid-template-columns:1fr;gap:28px}
-@media (min-width:860px){.about{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:48px}}
+@media (min-width:860px){.about{grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:48px;align-items:start}}
+.portrait{margin:0;max-width:300px;border:1px solid var(--rule);background:var(--panel);padding:6px}
+.portrait img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
+.about-text{display:grid;gap:28px;min-width:0}
+@media (min-width:1080px){.about-text{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:40px}}
 .bio{display:grid;gap:14px;align-content:start}
 .bio p{max-width:64ch}
 .summary{display:grid;gap:12px;align-content:start;background:var(--panel);border:1px solid var(--rule);padding:clamp(18px,3vw,26px)}
@@ -358,6 +373,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       <h2>Field ecologist and GIS analyst</h2>
     </div>
     <div class="about">
+      <figure class="portrait"><img src="img/stanley-sampa.webp" width="800" height="1000" alt="Stanley Sampa standing in dry woodland in the field"></figure>
+      <div class="about-text">
       <div class="bio">
         <p class="col-title">Bio</p>
         <p>Stanley Sampa is a Zambian field ecologist and GIS analyst based in Munyumbwe, Gwembe District. He combines satellite data with fieldwork to track how fire, rainfall and land use are changing Miombo woodlands and farmland, and he works alongside the communities who depend on them.</p>
@@ -368,6 +385,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
         <p class="col-title">Professional summary</p>
         <p>Field ecologist and GIS analyst working across wildlife, forestry and agricultural systems in Zambia. I run spatial analyses in ArcGIS Pro, QGIS, Google Earth Engine and R, including land cover change detection, least-cost path modelling and vegetation index analysis. I collect the field data behind them with camera traps, vegetation plots, GPS, ODK/KoBo and SMART. I also train field teams and farmer groups, and manage community programmes from planning through to reporting.</p>
       </aside>
+      </div>
     </div>
   </section>
 
@@ -820,6 +838,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
         <h3>Tree Inventory Intern</h3>
         <span class="org">Community Climate Solutions Zambia (CCSZ) · Kasanka landscape</span>
         <p>Surveyed 26 geo-referenced Miombo woodland plots across Lavushimanda and Chitambo, recording DBH, tree health and species with GPS, ODK and a tree inventory app.</p>
+        <figure class="exp-photo">
+          <button class="shot zoom" type="button" data-caption="Measuring DBH in Miombo woodland, Kasanka landscape"><img src="img/ccsz-dbh-kasanka.webp" width="800" height="1067" alt="Stanley Sampa in rain gear measuring the diameter of a Miombo tree with calipers" loading="lazy"></button>
+          <figcaption>Measuring DBH, Kasanka landscape</figcaption>
+        </figure>
       </li>
       <li>
         <span class="when">Apr 2024 – Feb 2025</span>
